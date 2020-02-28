@@ -14,7 +14,7 @@ namespace Sticky.Models.Context
 
         public int Id { get; set; }
         public string UserId { get; set; }
-        public string Host { get; set; }
+        public string HostAddress { get; set; }
         public string HashCode { get; set; }
         public bool HostValidated { get; set; }
         public bool PageValidated { get; set; }
