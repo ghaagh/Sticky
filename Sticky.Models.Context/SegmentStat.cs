@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class SegmentStats
+    public partial class SegmentStat
     {
         public int Id { get; set; }
         public int SegmentId { get; set; }

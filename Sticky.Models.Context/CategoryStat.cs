@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class CategoryStats
+    public partial class CategoryStat
     {
         public long Id { get; set; }
         public int CategoryId { get; set; }
@@ -13,6 +13,6 @@ namespace Sticky.Models.Context
         public int Day { get; set; }
         public int Counter { get; set; }
 
-        public virtual RecordedCategories Category { get; set; }
+        public virtual RecordedCategory Category { get; set; }
     }
 }

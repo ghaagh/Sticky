@@ -3,14 +3,11 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class Hosts
+    public partial class Host
     {
-        public Hosts()
+        public Host()
         {
-            CreatedSegments = new HashSet<CreatedSegments>();
-            DruidSegmentOwnership = new HashSet<SegmentOwnership>();
-            DynamicAdHtml = new HashSet<DynamicAdHtml>();
-            RecordedCategories = new HashSet<RecordedCategories>();
+            RecordedCategories = new HashSet<RecordedCategory>();
             SegmentPagePattern = new HashSet<SegmentPagePattern>();
             UsersHostAccess = new HashSet<UsersHostAccess>();
         }
@@ -38,9 +35,7 @@ namespace Sticky.Models.Context
         public int? ProductImageHeight { get; set; }
 
         public virtual AspNetUsers User { get; set; }
-        public virtual ICollection<SegmentOwnership> DruidSegmentOwnership { get; set; }
-        public virtual ICollection<DynamicAdHtml> DynamicAdHtml { get; set; }
-        public virtual ICollection<RecordedCategories> RecordedCategories { get; set; }
+        public virtual ICollection<RecordedCategory> RecordedCategories { get; set; }
         public virtual ICollection<SegmentPagePattern> SegmentPagePattern { get; set; }
         public virtual ICollection<UsersHostAccess> UsersHostAccess { get; set; }
     }

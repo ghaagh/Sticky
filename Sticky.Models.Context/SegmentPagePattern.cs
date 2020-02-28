@@ -13,6 +13,6 @@ namespace Sticky.Models.Context
         public bool Deleted { get; set; }
 
         public virtual AspNetUsers CreatorUser { get; set; }
-        public virtual Hosts Host { get; set; }
+        public virtual Host Host { get; set; }
     }
 }

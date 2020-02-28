@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class AudienceTypes
+    public partial class AudienceType
     {
-        public AudienceTypes()
+        public AudienceType()
         {
-            Segments = new HashSet<Segments>();
+            Segments = new HashSet<Segment>();
         }
 
         public int Id { get; set; }
         public string AudienceTypeName { get; set; }
 
-        public virtual ICollection<Segments> Segments { get; set; }
+        public virtual ICollection<Segment> Segments { get; set; }
     }
 }

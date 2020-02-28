@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class UserTotalVisits
+    public partial class UserTotalVisit
     {
         public int Id { get; set; }
         public int HostId { get; set; }

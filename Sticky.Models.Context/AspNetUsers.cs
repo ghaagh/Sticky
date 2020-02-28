@@ -10,12 +10,8 @@ namespace Sticky.Models.Context
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
-            CreatedSegments = new HashSet<CreatedSegments>();
-            DruidSegmentOwnership = new HashSet<SegmentOwnership>();
-            DruidSegments = new HashSet<Segments>();
-            DynamicAdHtml = new HashSet<DynamicAdHtml>();
-            Hosts = new HashSet<Hosts>();
-            ProductGroupings = new HashSet<ProductGroupings>();
+            DruidSegments = new HashSet<Segment>();
+            Hosts = new HashSet<Host>();
             SegmentPagePattern = new HashSet<SegmentPagePattern>();
             UsersHostAccess = new HashSet<UsersHostAccess>();
         }
@@ -42,11 +38,8 @@ namespace Sticky.Models.Context
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual ICollection<SegmentOwnership> DruidSegmentOwnership { get; set; }
-        public virtual ICollection<Segments> DruidSegments { get; set; }
-        public virtual ICollection<DynamicAdHtml> DynamicAdHtml { get; set; }
-        public virtual ICollection<Hosts> Hosts { get; set; }
-        public virtual ICollection<ProductGroupings> ProductGroupings { get; set; }
+        public virtual ICollection<Segment> DruidSegments { get; set; }
+        public virtual ICollection<Host> Hosts { get; set; }
         public virtual ICollection<SegmentPagePattern> SegmentPagePattern { get; set; }
         public virtual ICollection<UsersHostAccess> UsersHostAccess { get; set; }
     }

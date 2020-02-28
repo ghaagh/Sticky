@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class PartnerRequestLogs
+    public partial class PartnerRequestLog
     {
         public long Id { get; set; }
         public DateTime LogDate { get; set; }
@@ -12,6 +12,6 @@ namespace Sticky.Models.Context
         public int TotalResponse { get; set; }
         public double DayCost { get; set; }
 
-        public virtual Partners Partner { get; set; }
+        public virtual Partner Partner { get; set; }
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class Partners
+    public partial class Partner
     {
-        public Partners()
+        public Partner()
         {
-            PartnerRequestLogs = new HashSet<PartnerRequestLogs>();
+            PartnerRequestLogs = new HashSet<PartnerRequestLog>();
         }
 
         public int Id { get; set; }
@@ -17,6 +17,6 @@ namespace Sticky.Models.Context
         public string CookieSyncAddress { get; set; }
         public bool? Verified { get; set; }
 
-        public virtual ICollection<PartnerRequestLogs> PartnerRequestLogs { get; set; }
+        public virtual ICollection<PartnerRequestLog> PartnerRequestLogs { get; set; }
     }
 }

@@ -3,8 +3,12 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class Clicks
+    public partial class Click
     {
+        public Click()
+        {
+            Segment = new Segment();
+        }
         public long Id { get; set; }
         public int SegmentId { get; set; }
         public DateTime Date { get; set; }
@@ -13,5 +17,6 @@ namespace Sticky.Models.Context
         public int Day { get; set; }
         public long Count { get; set; }
 
+        public virtual Segment Segment { get; set; } 
     }
 }
