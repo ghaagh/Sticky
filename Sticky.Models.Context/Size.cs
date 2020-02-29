@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Sticky.Models.Context
 {
-    public partial class Sizes
+    public partial class Size
     {
-        public Sizes()
+        public Size()
         {
         }
         public int Id { get; set; }

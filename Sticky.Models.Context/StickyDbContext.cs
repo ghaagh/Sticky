@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Sticky.Models.Context
 {
@@ -38,7 +37,7 @@ namespace Sticky.Models.Context
         public virtual DbSet<SegmentPagePattern> SegmentPagePattern { get; set; }
         public virtual DbSet<SegmentStaticNative> SegmentStaticNatives { get; set; }
         public virtual DbSet<SegmentStat> SegmentStats { get; set; }
-        public virtual DbSet<Sizes> Sizes { get; set; }
+        public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<UserTotalVisit> UserTotalVisits { get; set; }
         public virtual DbSet<UsersHostAccess> UsersHostAccess { get; set; }
 
@@ -214,7 +213,7 @@ namespace Sticky.Models.Context
 
                 entity.Property(e => e.HashCode).HasMaxLength(450);
 
-                entity.Property(e => e.Host).HasMaxLength(100);
+                entity.Property(e => e.HostAddress).HasMaxLength(100);
 
                 entity.Property(e => e.LogoAddress).HasMaxLength(2000);
 
@@ -330,7 +329,7 @@ namespace Sticky.Models.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SegmentStaticNatives_Segments");
             });
-            modelBuilder.Entity<Sizes>(entity =>
+            modelBuilder.Entity<Size>(entity =>
             {
                 entity.Property(e => e.AdSize)
                     .IsRequired()
