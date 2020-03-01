@@ -22,7 +22,8 @@ namespace Sticky.Models.Context
         public string AudienceExtra { get; set; }
         public string ActionExtra { get; set; }
         public bool Paused { get; set; }
-        public bool? IsPublic { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsPublic { get; set; }
         public long? AudienceNumber { get; set; }
         public virtual ActionType Action { get; set; }
         public virtual AudienceType Audience { get; set; }

@@ -1,7 +1,7 @@
 ﻿using StackExchange.Redis;
 using Sticky.Models.Etc;
 
-namespace Sticky.Repositories.Common.Interfaces
+namespace Sticky.Repositories.Common
 {
     public interface IRedisCache
     {

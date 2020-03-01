@@ -27,7 +27,7 @@ namespace Sticky.Models.Context
         public virtual DbSet<AudienceType> AudienceTypes { get; set; }
         public virtual DbSet<CategoryStat> CategoryStats { get; set; }
         public virtual DbSet<Click> Clicks { get; set; }
-        public virtual DbSet<Segment> DruidSegments { get; set; }
+        public virtual DbSet<Segment> Segments { get; set; }
         public virtual DbSet<Host> Hosts { get; set; }
         public virtual DbSet<PartnerRequestLog> PartnerRequestLogs { get; set; }
         public virtual DbSet<Partner> Partners { get; set; }

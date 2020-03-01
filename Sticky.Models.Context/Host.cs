@@ -10,6 +10,7 @@ namespace Sticky.Models.Context
             RecordedCategories = new HashSet<RecordedCategory>();
             SegmentPagePattern = new HashSet<SegmentPagePattern>();
             UsersHostAccess = new HashSet<UsersHostAccess>();
+            Segments = new HashSet<Segment>();
         }
 
         public int Id { get; set; }
@@ -36,6 +37,7 @@ namespace Sticky.Models.Context
 
         public virtual AspNetUsers User { get; set; }
         public virtual ICollection<RecordedCategory> RecordedCategories { get; set; }
+        public virtual ICollection<Segment> Segments { get; set; }
         public virtual ICollection<SegmentPagePattern> SegmentPagePattern { get; set; }
         public virtual ICollection<UsersHostAccess> UsersHostAccess { get; set; }
     }
