@@ -7,9 +7,9 @@ namespace Sticky.Repositories.Dashboard
 {
     public interface ITextTemplateManager
     {
-        Task<bool> UpdateTemplateAsync(UpdateTextTemplateRequestV2 templates);
+        Task<bool> UpdateTemplateAsync(UpdateTextTemplateRequest templates);
 
-        Task<List<TextTemplateResult>> GetTemplateAsync(string email, int? id);
+        Task<List<TextTemplateResult>> GetTemplateAsync(string userId, int? id);
 
     }
 }

@@ -12,13 +12,11 @@ namespace Sticky.Repositories.Dashboard.Implementions
     public class SegmentManager : ISegmentManager
     {
         private readonly StickyDbContext _db;
-        private readonly IUserSearchManager _userSearchManager;
-        public SegmentManager(StickyDbContext db, IUserSearchManager userSearchManager)
+        public SegmentManager(StickyDbContext db)
         {
-            _userSearchManager = userSearchManager;
             _db = db;
         }
-        public async Task<Segment> CreateSegmentAsync(CreateDruidSegmentRequest request)
+        public async Task<Segment> CreateSegmentAsync(string userId,CreateSegmentRequest request)
         {
             using (var dbtr = _db.Database.BeginTransaction())
             {
@@ -26,7 +24,6 @@ namespace Sticky.Repositories.Dashboard.Implementions
                 try
                 {
 
-                    var userId = await _userSearchManager.SearchUser(request.Email);
                     var host = _db.Hosts.FirstOrDefaultAsync(c => c.UserId == userId && request.HostId == c.Id);
                     if (host == null)
                         return new Segment();
@@ -71,30 +68,24 @@ namespace Sticky.Repositories.Dashboard.Implementions
             var row = await _db.Segments.Where(v=>v.Id==segmentId).Include(c => c.Creator).Include(c => c.Host).Where(c=>c.IsDeleted==false).Select(c => new SegmentResult { IsPublic=c.IsPublic,IsPaused = c.Paused, CreateDate = c.CreateDate,Id = c.Id, Name = c.SegmentName, Owner = c.Creator.UserName, Host = new HostData() { Address = c.Host.HostAddress, Id = c.HostId } }).FirstOrDefaultAsync();
             return row;
         }
-        public async Task<bool> PublicAccessToggleAsync(string email,int segmentId)
+        public async Task<bool> PublicAccessToggleAsync(string userId,int segmentId)
         {
-            var userId = await _userSearchManager.SearchUser(email);
             var segment =await _db.Segments.FirstOrDefaultAsync(c => c.Id == segmentId);
             if (segment.CreatorId != userId)
                 return false;
             if (segment.ActionId !=1)
                 return false;
-            if (segment.IsPublic == null)
-                segment.IsPublic = true;
-            else
             segment.IsPublic = !segment.IsPublic;
             await _db.SaveChangesAsync();
             return true;
         }
-        public async Task<List<SegmentResult>> GetUserSegmentsAsync(string email,int hostId)
+        public async Task<List<SegmentResult>> GetUserSegmentsAsync(string userId,int hostId)
         {
-            var userId = await _userSearchManager.SearchUser(email);
             var row = await _db.Segments.Where(c => (c.HostId == hostId | hostId==0)).Include(c=>c.Creator).Include(c=>c.Host).Select(c => new SegmentResult {UserCount=c.AudienceNumber, AudieceExtra=c.AudienceExtra,ActionExtra=c.ActionExtra,IsPublic = c.IsPublic,ActionId=c.ActionId,IsPaused=c.Paused,CreateDate=c.CreateDate,AudienceId=c.AudienceId,Id = c.Id, Name = c.SegmentName,Owner=c.Creator.UserName,Host=new HostData() {Address=c.Host.HostAddress,Id=c.HostId } }).ToListAsync();
             return row;
         }
-        public async Task<List<SegmentResult>> GetPublicSegmentsAsync(string email)
+        public async Task<List<SegmentResult>> GetPublicSegmentsAsync(string userId)
         {
-            var userId = await _userSearchManager.SearchUser(email);
             var row = await _db.Segments.Include(c=>c.Host).Where(c => (c.IsPublic==true || c.Host.UserId==userId)).Include(c => c.Creator).Select(c => new SegmentResult {UserCount=c.AudienceNumber, IsPublic = c.IsPublic, IsPaused = c.Paused, CreateDate = c.CreateDate, Id = c.Id, Name = c.SegmentName, Owner = c.Creator.UserName, Host = new HostData() { Address = c.Host.HostAddress, Id = c.HostId } }).ToListAsync();
             return row;
         }
@@ -115,9 +106,8 @@ namespace Sticky.Repositories.Dashboard.Implementions
 
         }
 
-        public async Task<bool> UpdateNativesAsync(SegmentNativeRequest request)
+        public async Task<bool> UpdateNativesAsync(string userId,SegmentNativeRequest request)
         {
-            var userId = await _userSearchManager.SearchUser(request.Email);
             var segment = _db.Segments.Where(c => c.CreatorId == userId && c.Id == request.SegmentId);
             if (await segment.AnyAsync())
                 return false;

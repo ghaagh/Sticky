@@ -17,20 +17,17 @@ namespace Sticky.Repositories.Dashboard.Implementions
     {
 
         private readonly StickyDbContext _db;
-        private readonly IUserSearchManager _userSearchManager;
         private readonly IErrorLogger _errorLogger;
         private readonly DashboardAPISetting _setting;
-        public HostManager(StickyDbContext db, IUserSearchManager userSearchManager, IOptions<DashboardAPISetting> options, IErrorLogger errorLogger)
+        public HostManager(StickyDbContext db, IOptions<DashboardAPISetting> options, IErrorLogger errorLogger)
         {
-            _userSearchManager = userSearchManager;
             _errorLogger = errorLogger;
             _db = db;
             _setting = options.Value;
         }
-        public async Task<HostResult> CreateAsync(CreateHostRequest request)
+        public async Task<HostResult> CreateAsync(string userId,CreateHostRequest request)
         {
             var fileLocation = _setting.ScriptLocation;
-            var userId = await _userSearchManager.SearchUser(request.Email);
             var currentHost = _db.Hosts.FirstOrDefault(c => c.HostAddress == request.HostAddress);
             if (currentHost == null)
             {
@@ -54,7 +51,7 @@ namespace Sticky.Repositories.Dashboard.Implementions
                 {
                     await _errorLogger.LogError("DashboardHostManager=>"+ex.Message);
                 }
-                return new HostResult() { Id = newHost.Id, TrackerAddress = "https://api.stickytracker.net/" + newHost.HostAddress.RemoveSpecialCharacters() + "/track.js", HostAddress = newHost.HostAddress };
+                return new HostResult() { Id = newHost.Id, TrackerAddress = _setting.AdvertisementUrlBase + newHost.HostAddress.RemoveSpecialCharacters() + "/track.js", HostAddress = newHost.HostAddress };
             }
             else
                 return new HostResult()
@@ -74,8 +71,10 @@ namespace Sticky.Repositories.Dashboard.Implementions
 
         }
 
-        public async Task<bool> ModifyHostAsync(int id, ModifyHostRequest request)
+        public async Task<bool> ModifyHostAsync(int id,string userId, ModifyHostRequest request)
         {
+            if (!await UserHasAccessToHost(userId,id))
+                return false;
             var row = await _db.Hosts.FirstOrDefaultAsync(c => c.Id == id);
             row.ProductValidityId = request.ProductValidityId;
             row.UserValidityId = request.UserValidityId;
@@ -87,9 +86,8 @@ namespace Sticky.Repositories.Dashboard.Implementions
             return true;
         }
 
-        public async Task<IEnumerable<Host>> GetUserHostsAsync(string email, int? id)
+        public async Task<IEnumerable<Host>> GetUserHostsAsync(string userId, int? id)
         {
-            var userId = await _userSearchManager.SearchUser(email);
             if (id != null)
             {
                 var host = _db.UsersHostAccess.Where(c => c.UserId == userId).Include(c => c.Host).Include(c => c.Host.User).Where(c => c.HostId == id).AsEnumerable().Select(c => c.Host);
@@ -100,19 +98,16 @@ namespace Sticky.Repositories.Dashboard.Implementions
             return hosts;
         }
 
-        public async Task<bool> GrantAccessToHostAsync(string currentEmail, string accessEmail, int hostId)
+        public async Task<bool> GrantAccessToHostAsync(string userId, string destinationUserId, int hostId)
         {
-            var userId = await _userSearchManager.SearchUser(currentEmail);
-            var userHosts = await _db.UsersHostAccess.Where(c => c.UserId == userId).Select(c => c.HostId).ToListAsync();
-            if (!userHosts.Contains(hostId))
+            if(!await UserHasAccessToHost(userId,hostId))
                 return false;
             try
             {
-                var wantToAdUserId = await _userSearchManager.SearchUser(accessEmail);
-                var isExistNow = await _db.UsersHostAccess.FirstOrDefaultAsync(c => c.UserId == wantToAdUserId && c.HostId == hostId) == null;
+                var isExistNow = await _db.UsersHostAccess.FirstOrDefaultAsync(c => c.UserId == destinationUserId && c.HostId == hostId) == null;
                 if (!isExistNow)
                     return true;
-                await _db.UsersHostAccess.AddAsync(new UsersHostAccess() { AdminAccess = true, HostId = hostId, UserId = wantToAdUserId });
+                await _db.UsersHostAccess.AddAsync(new UsersHostAccess() { AdminAccess = true, HostId = hostId, UserId = destinationUserId });
                 await _db.SaveChangesAsync();
                 return true;
             }
@@ -126,13 +121,17 @@ namespace Sticky.Repositories.Dashboard.Implementions
 
         }
 
-        public async Task<IEnumerable<Host>> GetAllHostsAsync(string email)
+        public async Task<IEnumerable<Host>> GetAllHostsAsync(string userId)
         {
-            var userId = await _userSearchManager.SearchUser(email);
             var userHosts = await _db.UsersHostAccess.Where(c => c.UserId == userId).Select(c => c.HostId).ToListAsync();
             var hosts = _db.Hosts.Where(c => c.HostValidated).Include(c => c.User).Include(c => c.Segments).Where(c => c.Segments.Any(d => d.IsPublic == true) || userHosts.Contains(c.Id)).AsEnumerable();
             return hosts;
 
+        }
+
+        public async Task<bool> UserHasAccessToHost(string userId, int host)
+        {
+            return await _db.UsersHostAccess.AnyAsync(c => c.UserId == userId && c.HostId == host);
         }
     }
 }

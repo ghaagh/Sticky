@@ -35,7 +35,7 @@ namespace Sticky.Models.Context
         public int? ProductImageWidth { get; set; }
         public int? ProductImageHeight { get; set; }
 
-        public virtual AspNetUsers User { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<RecordedCategory> RecordedCategories { get; set; }
         public virtual ICollection<Segment> Segments { get; set; }
         public virtual ICollection<SegmentPagePattern> SegmentPagePattern { get; set; }

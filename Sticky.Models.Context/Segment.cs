@@ -28,7 +28,7 @@ namespace Sticky.Models.Context
         public virtual ActionType Action { get; set; }
         public virtual AudienceType Audience { get; set; }
         public virtual Host Host { get; set; }
-        public virtual AspNetUsers Creator { get; set; }
+        public virtual User Creator { get; set; }
         public virtual ICollection<ProductTextTemplate> ProductTextTemplates { get; set; }
         public virtual ICollection<SegmentStaticNative> SegmentStaticNatives { get; set; }
         public virtual ICollection<Click> Clicks { get; set; }

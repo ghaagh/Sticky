@@ -11,6 +11,6 @@ namespace Sticky.Models.Context
         public bool AdminAccess { get; set; }
 
         public virtual Host Host { get; set; }
-        public virtual AspNetUsers User { get; set; }
+        public virtual User User { get; set; }
     }
 }

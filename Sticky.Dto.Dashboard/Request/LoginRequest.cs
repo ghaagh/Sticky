@@ -5,11 +5,12 @@ using System.Text;
 
 namespace Sticky.Dto.Dashboard.Request
 {
-    public class AdHostAccessRequest
+   public class LoginRequest
     {
         [Required]
-        public string TargetEmail { get; set; }
+        public string Email { get; set; }
+
         [Required]
-        public int? HostId { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Sticky.API.Dashboard.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Sticky.Models.Context;
+using Sticky.Models.Etc;
+using Sticky.Repositories.Dashboard;
+using Sticky.Repositories.Dashboard.Implementions;
+using Sticky.Repositories.Common;
+using Sticky.Repositories.Common.Implementions;
 
 namespace Sticky.API.Dashboard
 {
@@ -25,53 +34,78 @@ namespace Sticky.API.Dashboard
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+
+            var appSetting = Configuration.GetSection("Setting");
+            services.Configure<DashboardAPISetting>(appSetting);
+            var key = Encoding.ASCII.GetBytes(appSetting.Get<DashboardAPISetting>().JWTSecret);
+            var connectionString = appSetting.Get<DashboardAPISetting>().ConnectionString;
+            services.AddDbContext<StickyDbContext>(options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Sticky.API.Dashboard")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<StickyDbContext>().AddDefaultTokenProviders();
+            services.AddAuthentication(x =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddScoped<ICategoryFinder, CategoryFinder>()
+                    .AddScoped<IHostManager, HostManager>()
+                    .AddScoped<ITextTemplateManager, TextTemplateManager>()
+                    .AddScoped<ISegmentManager, SegmentManager>()
+                    .AddSingleton<IErrorLogger, ErrorLogger>()
+                    .AddSingleton<IRedisCache, RedisCache>()
+                    .AddScoped<IActionTypeManager, ActionTypeManager>()
+                    .AddScoped<IAudienceTypeManager, AudienceTypeManager>()
+                    .AddScoped<IHostDataExtractor, HostDataExtractor>()
+                    .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Version = "v1",
+                    Title = "Sticky Dashboard API",
+                    Description = "CRUD EndPoint for accessing retargeting features in panel",
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                });
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSwagger();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-
-            app.UseAuthentication();
-
-            app.UseMvc(routes =>
+            app.UseSwaggerUI(c =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sticky Dashborad API V1");
             });
+            app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
     }
 }

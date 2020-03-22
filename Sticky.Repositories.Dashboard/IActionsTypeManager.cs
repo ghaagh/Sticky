@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Sticky.Repositories.Dashboard
 {
-    public interface IActionsTypeManager
+    public interface IActionTypeManager
     {
         Task<List<ActionResult>> GetActionListAsync();
     }

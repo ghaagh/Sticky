@@ -7,7 +7,7 @@ using Sticky.Models.Context;
 
 namespace Sticky.Repositories.Dashboard.Implementions
 {
-    public class ActionTypeManager : IActionsTypeManager
+    public class ActionTypeManager : IActionTypeManager
     {
         private readonly StickyDbContext _db;
         public ActionTypeManager(StickyDbContext db)

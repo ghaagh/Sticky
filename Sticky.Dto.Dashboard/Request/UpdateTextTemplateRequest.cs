@@ -4,12 +4,7 @@ using System.Text;
 
 namespace Sticky.Dto.Dashboard.Request
 {
-   public class UpdateTextTemplateRequest
-    {
-        public int SegmentId { get; set; }
-        public List<string> Templates { get; set; } = new List<string>();
-    }
-    public class UpdateTextTemplateRequestV2
+    public class UpdateTextTemplateRequest
     {
         public int SegmentId { get; set; }
         public List<TemplateItem> Templates { get; set; } = new List<TemplateItem>();

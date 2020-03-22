@@ -18,14 +18,14 @@ namespace Sticky.Repositories.Dashboard.Implementions
         }
 
 
-        public async Task<List<TextTemplateResult>> GetTemplateAsync(string email, int? id)
+        public async Task<List<TextTemplateResult>> GetTemplateAsync(string userId, int? id)
         {
             return await _db.ProductTextTemplates.Where(c => c.SegmentId == id).Select(c => new TextTemplateResult() {Body= c.Template,MaxPrice=c.MaxPrice??0,MinPrice=c.MinPrice??0 }).ToListAsync();
 
         }
 
 
-        public async Task<bool> UpdateTemplateAsync(UpdateTextTemplateRequestV2 templates)
+        public async Task<bool> UpdateTemplateAsync(UpdateTextTemplateRequest templates)
         {
             using (var transaction = _db.Database.BeginTransaction())
             {

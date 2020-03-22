@@ -7,11 +7,12 @@ namespace Sticky.Repositories.Dashboard
 {
     public interface IHostManager
     {
-        Task<HostResult> CreateAsync(CreateHostRequest host);
-        Task<bool> ModifyHostAsync(int id,ModifyHostRequest validity);
-        Task<IEnumerable<Host>> GetUserHostsAsync(string email,int? id);
-        Task<IEnumerable<Host>> GetAllHostsAsync(string email);
-        Task<bool> GrantAccessToHostAsync(string currentEmail, string accessEmail, int hostId);
+        Task<HostResult> CreateAsync(string userId,CreateHostRequest host);
+        Task<bool> UserHasAccessToHost(string userId, int host);
+        Task<bool> ModifyHostAsync(int id, string userId,ModifyHostRequest validity);
+        Task<IEnumerable<Host>> GetUserHostsAsync(string userId,int? id);
+        Task<IEnumerable<Host>> GetAllHostsAsync(string userId);
+        Task<bool> GrantAccessToHostAsync(string userId, string destinationUserId, int hostId);
 
     }
 }

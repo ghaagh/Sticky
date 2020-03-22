@@ -1,15 +1,13 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Sticky.Models.Context
 {
-    public partial class StickyDbContext : DbContext
+    public partial class StickyDbContext : IdentityDbContext<User>
     {
-        public StickyDbContext()
-        {
-        }
-
         public StickyDbContext(DbContextOptions<StickyDbContext> options)
             : base(options)
         {
@@ -17,13 +15,6 @@ namespace Sticky.Models.Context
 
         public virtual DbSet<ActionType> ActionTypes { get; set; }
         public virtual DbSet<ActivityType> ActivityTypes { get; set; }
-        public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AudienceType> AudienceTypes { get; set; }
         public virtual DbSet<CategoryStat> CategoryStats { get; set; }
         public virtual DbSet<Click> Clicks { get; set; }
@@ -50,6 +41,8 @@ namespace Sticky.Models.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder);
             modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
 
             modelBuilder.Entity<ActionType>(entity =>
@@ -69,78 +62,6 @@ namespace Sticky.Models.Context
                     .IsRequired()
                     .HasMaxLength(100);
             });
-
-            modelBuilder.Entity<AspNetRoleClaims>(entity =>
-            {
-                entity.Property(e => e.RoleId)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetRoleClaims)
-                    .HasForeignKey(d => d.RoleId);
-            });
-
-            modelBuilder.Entity<AspNetRoles>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Name).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedName).HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<AspNetUserClaims>(entity =>
-            {
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserLogins>(entity =>
-            {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserRoles>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.RoleId });
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserTokens>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
-            });
-
-            modelBuilder.Entity<AspNetUsers>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Email).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
-
-                entity.Property(e => e.UserName).HasMaxLength(256);
-            });
-
             modelBuilder.Entity<AudienceType>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -199,7 +120,7 @@ namespace Sticky.Models.Context
                     .HasConstraintName("FK_DruidSegments_AudienceTypes");
 
                 entity.HasOne(d => d.Creator)
-                    .WithMany(p => p.DruidSegments)
+                    .WithMany(p => p.Segments)
                     .HasForeignKey(d => d.CreatorId)
                     .HasConstraintName("FK_DruidSegments_AspNetUsers");
             });
@@ -298,11 +219,7 @@ namespace Sticky.Models.Context
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.HasOne(d => d.CreatorUser)
-                    .WithMany(p => p.SegmentPagePattern)
-                    .HasForeignKey(d => d.CreatorUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SegmentPagePattern_AspNetUsers");
+              
 
                 entity.HasOne(d => d.Host)
                     .WithMany(p => p.SegmentPagePattern)
@@ -353,7 +270,7 @@ namespace Sticky.Models.Context
                     .HasConstraintName("FK_UsersHostAccess_Hosts");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.UsersHostAccess)
+                    .WithMany(p => p.UsersHostAccesses)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_UsersHostAccess_AspNetUsers");
             });

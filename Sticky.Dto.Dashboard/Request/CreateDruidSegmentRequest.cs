@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Sticky.Dto.Dashboard.Request
 {
-    public class CreateDruidSegmentRequest
+    public class CreateSegmentRequest
     {
 
         public string SegmentName { get; set; }
@@ -13,8 +13,6 @@ namespace Sticky.Dto.Dashboard.Request
         public int AudienceId { get; set; }
         public string ActionExtra { get; set; }
         public string AudienceExtra { get; set; }
-        [Required]
-        public string Email { get; set; }
         [Required]
         public int HostId { get; set; }
     }
