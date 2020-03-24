@@ -51,7 +51,7 @@ namespace Sticky.Repositories.Dashboard.Implementions
                 {
                     await _errorLogger.LogError("DashboardHostManager=>"+ex.Message);
                 }
-                return new HostResult() { Id = newHost.Id, TrackerAddress = _setting.AdvertisementUrlBase + newHost.HostAddress.RemoveSpecialCharacters() + "/track.js", HostAddress = newHost.HostAddress };
+                return new HostResult() { Id = newHost.Id, TrackerAddress = _setting.ScriptAPIUrlBase + newHost.HostAddress.RemoveSpecialCharacters() + "/track.js", HostAddress = newHost.HostAddress };
             }
             else
                 return new HostResult()

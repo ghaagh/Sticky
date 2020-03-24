@@ -71,6 +71,10 @@ namespace Sticky.Models.Etc
         public string ConnectionString { get; set; }
         public string ScriptLocation { get; set; }
         public int UserDataExpirationCache { get; set; }
+        public string ScriptAPIUrlBase { get; set; }
+    }
+    public class AdvertisementAPISetting
+    {
         public string AdvertisementUrlBase { get; set; }
     }
 

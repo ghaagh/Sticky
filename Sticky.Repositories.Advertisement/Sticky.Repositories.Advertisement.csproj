@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sticky.Dto.Advertisement\Sticky.Dto.Advertisement.csproj" />
     <ProjectReference Include="..\Sticky.Models.Context\Sticky.Models.Context.csproj" />
     <ProjectReference Include="..\Sticky.Models.Mongo\Sticky.Models.Mongo.csproj" />
     <ProjectReference Include="..\Sticky.Models.Redis\Sticky.Models.Redis.csproj" />
