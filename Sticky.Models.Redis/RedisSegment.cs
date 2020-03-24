@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sticky.Models.Redis
 {
-    public class DruidSegmentRedisData
+    public class RedisSegment
     {
         public int Id { get; set; }
         public int HostId { get; set; }

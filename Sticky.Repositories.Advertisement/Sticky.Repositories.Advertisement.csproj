@@ -5,7 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Intefaces\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="ZeroFormatter" Version="1.6.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sticky.Models.Context\Sticky.Models.Context.csproj" />
+    <ProjectReference Include="..\Sticky.Models.Mongo\Sticky.Models.Mongo.csproj" />
+    <ProjectReference Include="..\Sticky.Models.Redis\Sticky.Models.Redis.csproj" />
+    <ProjectReference Include="..\Sticky.Repositories.Common\Sticky.Repositories.Common.csproj" />
   </ItemGroup>
 
 </Project>
