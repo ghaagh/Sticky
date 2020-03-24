@@ -2,9 +2,12 @@
 
 namespace Sticky.API.Advertisement.Controller
 {
+    [Route("Home")]
     public class HomeController : ControllerBase
     {
-        public static string Index()
+        [HttpGet("Index")]
+        [Route("Index")]
+        public string Index()
         {
             return "hello to you too ;)";
         }

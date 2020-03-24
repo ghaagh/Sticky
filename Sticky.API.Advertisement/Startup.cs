@@ -57,6 +57,16 @@ namespace Sticky.API.Advertisement
             var client = new MongoClient("mongodb://localhost/");
             services.AddSingleton<IMongoClient, MongoClient>(c => client);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Version = "v1",
+                    Title = "Sticky Advertisement API",
+                    Description = "CRUD EndPoint for Getting advertisement",
+
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +83,13 @@ namespace Sticky.API.Advertisement
             }
 
             app.UseHttpsRedirection();
+         
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sticky Advertisement API V1");
+            });
             app.UseMvc();
         }
     }
