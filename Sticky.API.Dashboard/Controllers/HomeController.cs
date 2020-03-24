@@ -18,7 +18,7 @@ namespace Sticky.API.Dashboard.Controllers
         }
         [Route("Index")]
         [HttpGet]
-        public async Task<string> Index()
+        public string Index()
         {
             return "hello to you too ;)";
         }

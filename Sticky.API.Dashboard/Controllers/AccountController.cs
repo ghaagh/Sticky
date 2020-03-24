@@ -36,7 +36,7 @@ namespace Sticky.API.Dashboard.Controllers
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return await GenerateJwtToken(model.Email, appUser);
+                return GenerateJwtToken(model.Email, appUser);
             }
 
             throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
@@ -58,12 +58,12 @@ namespace Sticky.API.Dashboard.Controllers
                 await _userManager.AddToRoleAsync(user, Roles.HostOwner);
                 await _signInManager.SignInAsync(user, false);
                 
-                return await GenerateJwtToken(model.Email, user);
+                return GenerateJwtToken(model.Email, user);
             }
 
             throw new ApplicationException("UNKNOWN_ERROR");
         }
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        private object GenerateJwtToken(string email, IdentityUser user)
         {
             var claims = new List<Claim>
             {

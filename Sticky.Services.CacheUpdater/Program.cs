@@ -37,14 +37,16 @@ namespace Sticky.Services.CacheUpdater
             var _hostCache = serviceProvider.GetService<IHostCache>();
             while (true)
             {
-                List<Task> tasks = new List<Task>();
-                tasks.Add(new SegmentCache(_redisCache).Initial(connectionString));
-                tasks.Add(new HostScriptChecker(_redisCache).Initial(connectionString));
-                tasks.Add(new HostCache(_redisCache).Initial(connectionString));
-                tasks.Add(new PartnerCache(_redisCache).Initial(connectionString));
-                tasks.Add(new TotalVisitUpdater(_redisCache, _hostCache).FlushToSql(connectionString));
-                tasks.Add(new AwesomeTextGenerator(_redisCache).Initial(connectionString));
-                tasks.Add(new CategoryLogger(_redisCache).FlushToSql(connectionString));
+                List<Task> tasks = new List<Task>
+                {
+                    new SegmentCache(_redisCache).Initial(connectionString),
+                    new HostScriptChecker(_redisCache).Initial(connectionString),
+                    new HostCache(_redisCache).Initial(connectionString),
+                    new PartnerCache(_redisCache).Initial(connectionString),
+                    new TotalVisitUpdater(_redisCache, _hostCache).FlushToSql(connectionString),
+                    new AwesomeTextGenerator(_redisCache).Initial(connectionString),
+                    new CategoryLogger(_redisCache).FlushToSql(connectionString)
+                };
 
                 await Task.WhenAll(tasks);
                 Thread.Sleep(TimeSpan.FromMinutes(interval));
