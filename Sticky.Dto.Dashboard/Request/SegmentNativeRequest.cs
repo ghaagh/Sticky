@@ -10,7 +10,6 @@ namespace Sticky.Dto.Dashboard.Request
         public string NativeLogoAddress { get; set; }
         public string NativeLogoOtherData { get; set; }
         public int SegmentId { get; set; }
-        public string Email { get; set; }
 
     }
 }

@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Sticky.API.Dashboard.Models;
+using Sticky.Models.Context;
 
 namespace Sticky.API.Dashboard.Controllers
 {
+    [Route("Home")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public HomeController(UserManager<User> userManager)
         {
-            return View();
         }
-
-        public IActionResult Privacy()
+        [Route("Index")]
+        [HttpGet]
+        public string Index()
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return "hello to you too ;)";
         }
     }
 }

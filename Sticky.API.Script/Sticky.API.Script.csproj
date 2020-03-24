@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-Sticky.API.Script-A4709536-F739-4569-86CA-EA5785E052E4</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
@@ -10,6 +9,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sticky.Dto.Script\Sticky.Dto.Script.csproj" />
+    <ProjectReference Include="..\Sticky.Repositories.Advertisement\Sticky.Repositories.Advertisement.csproj" />
   </ItemGroup>
 
 </Project>

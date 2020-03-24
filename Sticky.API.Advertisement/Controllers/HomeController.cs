@@ -1,29 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Sticky.API.Advertisement.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Sticky.API.Advertisement.Controllers
+namespace Sticky.API.Advertisement.Controller
 {
-    public class HomeController : Controller
+    [Route("Home")]
+    public class HomeController : ControllerBase
     {
-        public IActionResult Index()
+        [HttpGet("Index")]
+        [Route("Index")]
+        public string Index()
         {
-            return View();
+            return "hello to you too ;)";
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

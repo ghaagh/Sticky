@@ -10,7 +10,5 @@ namespace Sticky.Dto.Dashboard.Request
 
         [Required]
         public string HostAddress { get; set; }
-        [Required]
-        public string Email { get; set; }
     }
 }

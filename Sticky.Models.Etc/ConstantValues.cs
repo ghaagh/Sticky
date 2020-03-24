@@ -31,6 +31,12 @@ namespace Sticky.Models.Etc
         General = 0,
         SpecificForUser=1
     }
+    public static class Roles
+    {
+        public const string Admin = "ADMIN";
+        public const string HostOwner = "HOSTOWNER";
+        public const string HostOwnerOrAdmin = "ADMIN,HOSTOWNER";
+    }
     public static class ResponseStatus
     {
         public const string Error = "Error";
