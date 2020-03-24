@@ -26,3 +26,6 @@ Sticky is an all-in-one open-source retargeting solution for ad-networks and RTB
 # Note!
 - You may also need IIS or nginX to publish all API .
 - for services part, it is recommended to use SupervisorCTL to manage your service. you can also use a tmux window for services. but it is not recommended.
+
+# Important!
+- This project is currently under heavy construction.
