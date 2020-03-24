@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.API.Script", "Sticky
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.Dto.Script", "Sticky.Dto.Script\Sticky.Dto.Script.csproj", "{5AB63D6C-70D9-474D-B080-EC3179F58F36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.API.CookieSyncing", "Sticky.API.CookieSyncing\Sticky.API.CookieSyncing.csproj", "{85A2E84D-69F2-4361-98FC-BA3D96103B2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,10 @@ Global
 		{5AB63D6C-70D9-474D-B080-EC3179F58F36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AB63D6C-70D9-474D-B080-EC3179F58F36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AB63D6C-70D9-474D-B080-EC3179F58F36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +163,7 @@ Global
 		{1E70AC51-EED3-40C8-A72B-259E1D3C723E} = {F779EA4B-B52C-4756-ACCE-C4BEEEA9FA25}
 		{3BF0D792-D367-419A-BCEC-BEFF120B6126} = {D082FFD0-6256-4D80-832D-068F28714F86}
 		{5AB63D6C-70D9-474D-B080-EC3179F58F36} = {F779EA4B-B52C-4756-ACCE-C4BEEEA9FA25}
+		{85A2E84D-69F2-4361-98FC-BA3D96103B2F} = {D082FFD0-6256-4D80-832D-068F28714F86}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14A30135-3B09-4D9C-9482-10EC7741BF1C}

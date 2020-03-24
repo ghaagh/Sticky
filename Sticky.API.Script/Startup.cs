@@ -26,7 +26,6 @@ namespace Sticky.API.Script
         {
             services.AddCors();
             services.AddMvc();
-            services.AddMemoryCache();
             var appSetting = Configuration.GetSection("Setting");
             services.Configure<ScriptAPISetting>(appSetting);
             var connectionString = appSetting.Get<ScriptAPISetting>().ConnectionString;

@@ -24,7 +24,7 @@ namespace Sticky.Repositories.Common.Implementions
             {
                 ConnectTimeout = 500,
                 AbortOnConnectFail = true,
-                EndPoints = { "localhost:6364" }
+                EndPoints = { "localhost:6379" }
             };
             var t1 = ConnectionMultiplexer.Connect(redisOption);
             t1.PreserveAsyncOrder = false;
