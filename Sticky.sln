@@ -43,15 +43,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Dto.Dashboard", "Sti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.API.Dashboard", "Sticky.API.Dashboard\Sticky.API.Dashboard.csproj", "{2371135E-5B2B-4D3D-BD5D-CBC9030AA5A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.API.Advertisement", "Sticky.API.Advertisement\Sticky.API.Advertisement.csproj", "{A282A771-AD5E-4D07-BF21-00C03B571EEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.API.Advertisement", "Sticky.API.Advertisement\Sticky.API.Advertisement.csproj", "{A282A771-AD5E-4D07-BF21-00C03B571EEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.Dto.Advertisement", "Sticky.Dto.Advertisement\Sticky.Dto.Advertisement.csproj", "{1E70AC51-EED3-40C8-A72B-259E1D3C723E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Dto.Advertisement", "Sticky.Dto.Advertisement\Sticky.Dto.Advertisement.csproj", "{1E70AC51-EED3-40C8-A72B-259E1D3C723E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.API.Script", "Sticky.API.Script\Sticky.API.Script.csproj", "{3BF0D792-D367-419A-BCEC-BEFF120B6126}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.API.Script", "Sticky.API.Script\Sticky.API.Script.csproj", "{3BF0D792-D367-419A-BCEC-BEFF120B6126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.Dto.Script", "Sticky.Dto.Script\Sticky.Dto.Script.csproj", "{5AB63D6C-70D9-474D-B080-EC3179F58F36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Dto.Script", "Sticky.Dto.Script\Sticky.Dto.Script.csproj", "{5AB63D6C-70D9-474D-B080-EC3179F58F36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.API.CookieSyncing", "Sticky.API.CookieSyncing\Sticky.API.CookieSyncing.csproj", "{85A2E84D-69F2-4361-98FC-BA3D96103B2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.API.CookieSyncing", "Sticky.API.CookieSyncing\Sticky.API.CookieSyncing.csproj", "{85A2E84D-69F2-4361-98FC-BA3D96103B2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configurations", "{0E61A23C-AC8B-4F9B-80E9-C761A8F5FBCD}"
+	ProjectSection(SolutionItems) = preProject
+		Druid_Page_Action_Datasource.json = Druid_Page_Action_Datasource.json
+		Druid_Product_Action_Datasource.Json = Druid_Product_Action_Datasource.Json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.Services.KafkaConsumer", "Sticky.Services.KafkaConsumer\Sticky.Services.KafkaConsumer.csproj", "{331D0628-95E6-43E7-AD28-F094027529A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +147,10 @@ Global
 		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85A2E84D-69F2-4361-98FC-BA3D96103B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331D0628-95E6-43E7-AD28-F094027529A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331D0628-95E6-43E7-AD28-F094027529A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331D0628-95E6-43E7-AD28-F094027529A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331D0628-95E6-43E7-AD28-F094027529A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +176,7 @@ Global
 		{3BF0D792-D367-419A-BCEC-BEFF120B6126} = {D082FFD0-6256-4D80-832D-068F28714F86}
 		{5AB63D6C-70D9-474D-B080-EC3179F58F36} = {F779EA4B-B52C-4756-ACCE-C4BEEEA9FA25}
 		{85A2E84D-69F2-4361-98FC-BA3D96103B2F} = {D082FFD0-6256-4D80-832D-068F28714F86}
+		{331D0628-95E6-43E7-AD28-F094027529A2} = {20C986FD-1363-4B1E-A009-846DBA38886E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14A30135-3B09-4D9C-9482-10EC7741BF1C}
