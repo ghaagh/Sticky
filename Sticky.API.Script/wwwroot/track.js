@@ -130,99 +130,22 @@ StickyRetargeting = function () {
             null !== r && r(a)
         }
     };
-        StickyRetargeting.ProductInfoExtract = function (e) {
-        var t = {},
-            r = 0;
-        if (null == e) return t;
-        var a = e.querySelector("[itemprop='price']");
-        null != a && (priceS = a.innerHTML || a.content || a.value, r = parseInt(priceS), t.Price = isNaN(r) ? 0 : r);
-        var i = e.querySelector("[itemprop='image']");
-        if (null != i) {
-            var n = i.src || i.content || i.querySelector("img").src;
-            t.ImageAddress = n
-        }
-        var d = e.querySelector("[itemprop='url']");
-        null != d && (t.PageAddress = d.href || d.innerText || d.content || d.value), t.PageAddress = t.PageAddress || e.href;
-        var o = e.querySelector("[itemprop='name']");
-        if (null != o) {
-            var c = o.innerText || o.content;
-            t.Name = c
-        }
-        var g = e.querySelector("[itemprop='productId']");
-        null != g && (t.ProductId = g.innerText || g.content || g.value);
-        var s = e.querySelector("[itemprop='category']");
-        null != s && (t.Category = s.innerText || s.content || s.value);
-        var l = e.querySelector("[itemprop='description']");
-        null != l && (t.Description = l.innerText || l.content || l.value);
-        var u = e.querySelector('[itemprop="availableFrom"]');
-        return t.Available = null == u, t
-    };
         StickyRetargeting
 };
 StickyRetargeting();
 window[window.addEventListener ? "addEventListener" : "attachEvent"](window.addEventListener ? "message" : "onmessage", function (e) {
     if (e.origin == StickyRetargeting.apibaseAddress && (data = JSON.parse(e.data), "GetCookie" == data.message)) {
-        StickyRetargeting.Is_Ready = !0, StickyRetargeting.hostId = data.HostId, StickyRetargeting.userId = data.UserId, StickyRetargeting.addToCartElement = document.getElementById(data.AddToCart);
-        var t = document.querySelectorAll("[itemtype='http://schema.org/Product']");
-        null != StickyRetargeting.addToCartElement && 0 != t.length && StickyRetargeting.addToCartElement.addEventListener("click", function (e) {
-            var r = {
-                ProductData: []
-            },
-                a = 0,
-                i = document.querySelector("[itemprop='productId']");
-            if (null != i && (a = i.innerText || i.content || i.value), 0 != a) {
-                var n = StickyRetargeting.ProductInfoExtract(t[0]);
-                n.Added = !0, r.HostId = hostId, r.UserId = userId, r.ProductData.push(n), r.PageAddress = window.location.href
-            }
-            StickyRetargeting.SendDataToServer(r, "/ProductUpdate")
-        }), setTimeout(function () {
-            if (0 == t.length) {
+        StickyRetargeting.Is_Ready = !0;
+        StickyRetargeting.hostId = data.HostId;
+        StickyRetargeting.userId = data.UserId;
+        setTimeout(function () {
                 var e = {
                     Address: window.location.href,
                     HostId: StickyRetargeting.hostId,
                     UserId: StickyRetargeting.userId
                 };
                 StickyRetargeting.SendDataToServer(e, "/PageLogger");
-                if (StickyRetargeting.hostId == 22) {
-                    var retargetingProduct = [];
-                    var price = 0;
-                    var schemaData = document.querySelectorAll('script[type="application/ld+json"]');
-                    schemaData.forEach(function (item, index) {
-                        var html = item.innerHTML.replace(/@/g, '').replace(/\n/g, '');
-                        if (html.indexOf('"type": "Product"') != -1) {
-                            var parsed = JSON.parse(html);
-                            if (parsed != null) {
-                                if (parsed.offers != null) {
-                                    price = parsed.offers.price;
-                                }
-                            }
-
-                        }
-                    });
-                    detailsElement = document.getElementsByClassName('deal-details')[0];
-                    var imageMeta = document.querySelector("meta[name='takhfifan:thumbnail']");
-                                        var urlMeta = document.querySelector("meta[property='og:url']");
-                    if (detailsElement != null && imageMeta != null && urlMeta!=null) {
-                        var details = JSON.parse(detailsElement.getAttribute('data-details'));
-
-                        details.price = price;
-                        retargetingProduct.push({ Price: details.price,PageAddress:urlMeta.content, Category: details.category, Name: details.name, ProductId: details.id, Available: true, ImageAddress: imageMeta.content });
-
-                        if (retargetingProduct.length != 0)
-                            StickyRetargeting.View_Products(retargetingProduct, null, null);
-                    }
-                }
-            } else {
-                var r = {
-                    ProductData: []
-                };
-                r.HostId = StickyRetargeting.hostId, r.PageAddress = window.location.href, r.UserId = StickyRetargeting.userId;
-                for (var a = 0; a < t.length; a++) {
-                    var i = StickyRetargeting.ProductInfoExtract(t[a]);
-                    i.Added = !1, r.ProductData.push(i)
-                }
-                StickyRetargeting.SendDataToServer(r, "/ProductUpdate")
-            }
+            
         }, 2e3)
     }
 }, !1);
