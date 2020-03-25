@@ -1,0 +1,118 @@
+{
+  "type": "kafka",
+  "dataSchema": {
+    "dataSource": "PageActions",
+    "parser": {
+      "type": "string",
+      "parseSpec": {
+        "format": "json",
+        "timestampSpec": {
+          "column": "Date",
+          "format": "iso"
+        },
+        "dimensionsSpec": {
+          "dimensions": [
+            "CategoryName",
+            {
+              "name": "UserId",
+              "type": "string"
+            },
+            {
+              "name": "PageAddress",
+              "type": "string"
+            },
+            {
+              "name": "HostId",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "metricsSpec": [
+      {
+        "type": "count",
+        "name": "Count"
+      }
+    ],
+    "granularitySpec": {
+      "type": "uniform",
+      "segmentGranularity": "DAY",
+      "queryGranularity": "DAY",
+      "rollup": true,
+      "intervals": null
+    },
+    "transformSpec": {
+      "filter": {
+        "type": "selector",
+        "dimension": "StatType",
+        "value": "PageView",
+        "extractionFn": null
+      },
+      "transforms": []
+    }
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "maxRowsInMemory": 1000000,
+    "maxBytesInMemory": 0,
+    "maxRowsPerSegment": 5000000,
+    "maxTotalRows": 20000000,
+    "intermediatePersistPeriod": "PT10M",
+    "basePersistDirectory": "/opt/druid/var/tmp/1574589916223-0",
+    "maxPendingPersists": 0,
+    "indexSpec": {
+      "bitmap": {
+        "type": "concise"
+      },
+      "dimensionCompression": "lz4",
+      "metricCompression": "lz4",
+      "longEncoding": "longs"
+    },
+    "indexSpecForIntermediatePersists": {
+      "bitmap": {
+        "type": "concise"
+      },
+      "dimensionCompression": "lz4",
+      "metricCompression": "lz4",
+      "longEncoding": "longs"
+    },
+    "buildV9Directly": true,
+    "reportParseExceptions": false,
+    "handoffConditionTimeout": 0,
+    "resetOffsetAutomatically": false,
+    "segmentWriteOutMediumFactory": null,
+    "workerThreads": null,
+    "chatThreads": null,
+    "chatRetries": 8,
+    "httpTimeout": "PT10S",
+    "shutdownTimeout": "PT80S",
+    "offsetFetchPeriod": "PT30S",
+    "intermediateHandoffPeriod": "P2147483647D",
+    "logParseExceptions": false,
+    "maxParseExceptions": 2147483647,
+    "maxSavedParseExceptions": 0,
+    "skipSequenceNumberAvailabilityCheck": false
+  },
+  "ioConfig": {
+    "topic": "Sticky",
+    "replicas": 1,
+    "taskCount": 1,
+    "taskDuration": "PT3600S",
+    "consumerProperties": {
+      "bootstrap.servers": "###Change###:9092"
+    },
+    "pollTimeout": 100,
+    "startDelay": "PT5S",
+    "period": "PT30S",
+    "useEarliestOffset": false,
+    "completionTimeout": "PT1800S",
+    "lateMessageRejectionPeriod": null,
+    "earlyMessageRejectionPeriod": null,
+    "stream": "Sticky",
+    "useEarliestSequenceNumber": false,
+    "type": "kafka"
+  },
+  "context": null,
+  "suspended": false
+}
