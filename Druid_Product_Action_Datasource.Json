@@ -110,7 +110,7 @@
     "taskCount": 1,
     "taskDuration": "PT3600S",
     "consumerProperties": {
-      "bootstrap.servers": "###Change###:9092"
+      "bootstrap.servers": "localhost:9092" /*###Change###*/
     },
     "pollTimeout": 100,
     "startDelay": "PT5S",
