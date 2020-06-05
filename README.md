@@ -28,4 +28,4 @@ Sticky is an all-in-one open-source retargeting solution for ad-networks and RTB
 - for services part, it is recommended to use SupervisorCTL to manage your service. you can also use a tmux window for services. but it is not recommended.
 
 # Important!
-- This project is currently under heavy construction.
+- Be patient . I am updating the docs of this project
