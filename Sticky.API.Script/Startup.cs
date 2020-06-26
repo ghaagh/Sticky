@@ -56,14 +56,13 @@ namespace Sticky.API.Script
             IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
-            app.UseCors(builder => builder.SetIsOriginAllowed(SetOriginAllowed)
-                                .AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(builder => builder.SetIsOriginAllowed(SetOriginAllowed).AllowAnyHeader().AllowAnyMethod());
 
             app.MapWhen(context => context.Request.Path.ToString().EndsWith("iframe.html"),
-appBuilder =>
-{
-    appBuilder.UseCustomHanlderMiddleware();
-});
+                appBuilder =>
+                {
+                    appBuilder.UseCustomHanlderMiddleware();
+                });
             app.UseStaticFiles();
             app.UseMvc(routes =>
             {

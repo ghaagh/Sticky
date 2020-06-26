@@ -8,112 +8,108 @@ using System.Threading.Tasks;
 
 namespace Sticky.API.Script.HttpMiddleware
 {
-    //[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class IFrameHandler
     {
         private readonly IHostCache _hostCache;
         private readonly ICrowlerCache _crowlerCache;
         private readonly IPartnerCache _partnerCache;
         private readonly IUserIdSetter _userIdSetter;
-        private readonly IErrorLogger _errorLogger;
         private readonly ScriptAPISetting _configuration;
-        public IFrameHandler(RequestDelegate next, IUserIdSetter userIdSetter,ICrowlerCache crowlerCache,IErrorLogger errorLogger,IOptions<ScriptAPISetting> configuration,IHostCache hostDictionary, IPartnerCache partnersManager)
+        public IFrameHandler(RequestDelegate next,
+            IUserIdSetter userIdSetter,
+            ICrowlerCache crowlerCache,
+            IOptions<ScriptAPISetting> configuration,
+            IHostCache hostDictionary,
+            IPartnerCache partnersManager)
         {
             _partnerCache = partnersManager;
             _hostCache = hostDictionary;
             _userIdSetter = userIdSetter;
             _crowlerCache = crowlerCache;
-           _errorLogger = errorLogger;
             _configuration = configuration.Value;
         }
         public async Task Invoke(HttpContext context)
         {
-            try
-            {
-              
-            context.Response.ContentType = "text/html";
-            var requestHost = context.Request.Headers["Referer"];
-            if(string.IsNullOrEmpty(requestHost))
-            {
-                await context.Response.WriteAsync("No Iframe! Don't Cheat!");
+            context.Response.ContentType = CommonStrings.ContentTypeTextHtml;
+            var requestHost = GetReferrer(context);
+            if (ReferrerIsEmpty(requestHost))
                 return;
-            }
-            string host = new Uri(requestHost).Authority.ToString();
-                var topdomain = "";
-                if (host.IndexOf(".") == host.LastIndexOf("."))
-                    topdomain = host;
-                else
-                    topdomain = host.Substring(host.IndexOf(".") + 1);
-                var hostData =await  _hostCache.GetHostAsync(topdomain);
-            if (hostData==null)
+            var topDomain = GetTopDomainHost(requestHost);
+            var host = await _hostCache.GetHostAsync(topDomain);
+            if (host == null)
                 return;
-
             string userCookie = context.Request.Cookies[_configuration.CookieName];
-                //try
-                //{
-                //    var logAgent= _redisCache.GetDatabase(DataAccess.RedisDatabases.CacheData).StringGet("LogAgent");
-                //    if (logAgent.HasValue)
-                //    {
-                //    var userAgent = context.Request.Headers["User-Agent"].ToString();
-                //    var agentstring = string.IsNullOrEmpty(userAgent.ToString()) ? "unknown" : userAgent.ToString();
-                //    var agentDb = _redisCache.GetDatabase(DataAccess.RedisDatabases.Logs);
-                //    await agentDb.HashIncrementAsync("AgentCounter",agentstring);
-                //    }
-
-                //}
-                //catch
-                //{
-
-                //}
-
-                long userId = 0;
+            long userId;
             if (userCookie == null)
-            {
-                userId = await _userIdSetter.GetNewUserIdAsync();
-                var co = new CookieOptions()
-                {
-                    Expires = DateTime.Now.AddYears(5),
-                    SameSite = SameSiteMode.None
-
-                    
-                };
-                if (_configuration.CookieDomain != ".")
-                    co.Domain = _configuration.CookieDomain;
-                context.Response.Cookies.Append(_configuration.CookieName, userId.ToString(),co);
-            }
+                userId = await SetNewUserCookieAsync(context);
             else
             {
                 var resultofparseCookie = long.TryParse(userCookie, out userId);
                 if (!resultofparseCookie)
                     return;
-
             }
-                if (await _crowlerCache.IsCrowler(userId))
-                {
-                    return;
-                }
-                var rawhtml = "<!DOCTYPE html><html><head><meta charset=\"utf-8\" /><title></title></head><body>partner_iframes<script>var sendingData = {};sendingData.message = \"GetCookie\";sendingData.UserId = user_identity;sendingData.FinalizePage = 'finalize_page';sendingData.HostId = host_identity;sendingData.AddToCart = 'add_to_cart';parent.postMessage(JSON.stringify(sendingData), \"*\");</script></body></html>";
-            var html = rawhtml.Replace("user_identity", userId.ToString()).Replace("host_identity", hostData.Id.ToString()).Replace("add_to_cart",hostData.AddToCardId).Replace("finalize_page",hostData.FinalizePage);
-                var partners = await _partnerCache.ListAsync();
-                var pixelHtml = "";
-                foreach (var item in partners)
-                {
-                    if (!string.IsNullOrEmpty(item.CookieSyncAddress))
-                    {
-                    var partnerAddress = item.CookieSyncAddress?.Replace("@StickyId", userId.ToString());
-                    pixelHtml+="<iframe src=\""+partnerAddress+"\"></iframe>";
-                    }
-
-                }
-               html= html.Replace("partner_iframes", pixelHtml);
-                await context.Response.WriteAsync(html);
-            }
-            catch(Exception ex)
+            if (await _crowlerCache.IsCrowler(userId))
+                return;
+            var html = await CreateInitialResponseAsync(userId, host);
+            await context.Response.WriteAsync(html);
+        }
+        private string GetReferrer(HttpContext context)
+        {
+            return context.Request.Headers[CommonStrings.ReferrerHeader];
+        }
+        private bool ReferrerIsEmpty(string referrer)
+        {
+            return string.IsNullOrEmpty(referrer);
+        }
+        private string GetTopDomainHost(string address)
+        {
+            string host = new Uri(address).Authority.ToString();
+            var topDomain = String.Empty;
+            if (host.IndexOf(CommonStrings.Dot) == host.LastIndexOf(CommonStrings.Dot))
+                topDomain = host;
+            else
+                topDomain = host.Substring(host.IndexOf(CommonStrings.Dot) + 1);
+            return topDomain;
+        }
+        private async Task<long> SetNewUserCookieAsync(HttpContext context)
+        {
+            long newUserId = await _userIdSetter.GetNewUserIdAsync();
+            var co = new CookieOptions
             {
-               await  _errorLogger.LogError(ex.Message);
-            }
-
+                Expires = DateTime.Now.AddYears(5),
+                SameSite = SameSiteMode.None
+            };
+            if (_configuration.CookieDomain != CommonStrings.Dot)
+                co.Domain = _configuration.CookieDomain;
+            context.Response.Cookies.Append(_configuration.CookieName, newUserId.ToString(), co);
+            return newUserId;
 
         }
+        private async Task<string> GeneratePartnerPixelsAsync(long userId)
+        {
+            var pixelHtml = "";
+            var partners = await _partnerCache.ListAsync();
+            foreach (var item in partners)
+            {
+                if (!string.IsNullOrEmpty(item.CookieSyncAddress))
+                {
+                    var partnerAddress = item.CookieSyncAddress?.Replace("@StickyId", userId.ToString());
+                    pixelHtml += "<iframe src=\"" + partnerAddress + "\"></iframe>";
+                }
+
+            }
+            return pixelHtml;
+        }
+        private async Task<string> CreateInitialResponseAsync(long userId, Models.Redis.HostWithoutRelation host)
+        {
+            var html = Initial.ResponseString
+                .Replace("user_identity", userId.ToString())
+                .Replace("host_identity", host.Id.ToString())
+                .Replace("add_to_cart", host.AddToCardId)
+                .Replace("finalize_page", host.FinalizePage)
+                .Replace("partner_iframes", await GeneratePartnerPixelsAsync(userId));
+            return html;
+        }
+
     }
 }

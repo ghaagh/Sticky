@@ -52,7 +52,9 @@ namespace Sticky.Models.Etc
     public static class CommonStrings
     {
         public const string Dot = ".";
+        public const string ReferrerHeader = "Referrer"
         public const string NoHost = "NO HOST";
+        public const string ContentTypeTextHtml= "text/html";
         public const string Origin = "Origin";
         public const string NoHostAccess = "NO ACCESS TO HOST";
     }
@@ -61,6 +63,11 @@ namespace Sticky.Models.Etc
         public const string InvalidData = "Invalid Data";
         public const string NotRegisteredPartner = "Not Registered Partner";
         public const string RequiredUserIdAndPartnerHashCode = "Your 'User Id' and 'Partner Hashcode' is required to get data.";
+    }
+    public static class Initial
+    {
+        public const string ResponseString = "<!DOCTYPE html><html><head><meta charset=\"utf-8\" /><title></title></head><body>partner_iframes<script>var sendingData = {};sendingData.message = \"GetCookie\";sendingData.UserId = user_identity;sendingData.FinalizePage = 'finalize_page';sendingData.HostId = host_identity;sendingData.AddToCart = 'add_to_cart';parent.postMessage(JSON.stringify(sendingData), \"*\");</script></body></html>";
+
     }
     public static class RequestType
     {
