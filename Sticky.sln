@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.705
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sticky.Repositories", "Sticky.Repositories", "{A5125250-8DBE-457B-9170-684C06E4AD9D}"
 EndProject
@@ -14,10 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Models.Context", "Sticky.Models.Context\Sticky.Models.Context.csproj", "{DED99F02-5A0D-454F-A28B-C33EDC13657E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Models.Mongo", "Sticky.Models.Mongo\Sticky.Models.Mongo.csproj", "{FD6592F6-8964-4260-928A-C2225DBF824E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Models.Aerospike", "Sticky.Models.Aerospike\Sticky.Models.Aerospike.csproj", "{551F828B-1C04-4819-AA41-37B1A719D3A2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Models.Kafka", "Sticky.Models.Kafka\Sticky.Models.Kafka.csproj", "{051638D0-8702-43B2-9160-EE217ADE3EA1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Models.Druid", "Sticky.Models.Druid\Sticky.Models.Druid.csproj", "{E464EC20-8D35-4996-B626-0EA06E3190DE}"
 EndProject
@@ -59,7 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configura
 		Druid_Product_Action_Datasource.Json = Druid_Product_Action_Datasource.Json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sticky.Services.KafkaConsumer", "Sticky.Services.KafkaConsumer\Sticky.Services.KafkaConsumer.csproj", "{331D0628-95E6-43E7-AD28-F094027529A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sticky.Services.KafkaConsumer", "Sticky.Services.KafkaConsumer\Sticky.Services.KafkaConsumer.csproj", "{331D0628-95E6-43E7-AD28-F094027529A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,14 +71,6 @@ Global
 		{FD6592F6-8964-4260-928A-C2225DBF824E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD6592F6-8964-4260-928A-C2225DBF824E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD6592F6-8964-4260-928A-C2225DBF824E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{551F828B-1C04-4819-AA41-37B1A719D3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{551F828B-1C04-4819-AA41-37B1A719D3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{551F828B-1C04-4819-AA41-37B1A719D3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{551F828B-1C04-4819-AA41-37B1A719D3A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{051638D0-8702-43B2-9160-EE217ADE3EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{051638D0-8702-43B2-9160-EE217ADE3EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{051638D0-8702-43B2-9160-EE217ADE3EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{051638D0-8702-43B2-9160-EE217ADE3EA1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E464EC20-8D35-4996-B626-0EA06E3190DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E464EC20-8D35-4996-B626-0EA06E3190DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E464EC20-8D35-4996-B626-0EA06E3190DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -158,8 +146,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DED99F02-5A0D-454F-A28B-C33EDC13657E} = {FCBA6A33-2941-43D9-BA1B-2AC43F4F786D}
 		{FD6592F6-8964-4260-928A-C2225DBF824E} = {FCBA6A33-2941-43D9-BA1B-2AC43F4F786D}
-		{551F828B-1C04-4819-AA41-37B1A719D3A2} = {FCBA6A33-2941-43D9-BA1B-2AC43F4F786D}
-		{051638D0-8702-43B2-9160-EE217ADE3EA1} = {FCBA6A33-2941-43D9-BA1B-2AC43F4F786D}
 		{E464EC20-8D35-4996-B626-0EA06E3190DE} = {FCBA6A33-2941-43D9-BA1B-2AC43F4F786D}
 		{4A090CFE-A72C-4C46-BC12-AF9E4BA3EDC1} = {FCBA6A33-2941-43D9-BA1B-2AC43F4F786D}
 		{5CA2B335-C133-424A-80D9-E436F131A1E3} = {20C986FD-1363-4B1E-A009-846DBA38886E}
