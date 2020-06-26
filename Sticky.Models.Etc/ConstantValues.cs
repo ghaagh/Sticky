@@ -52,7 +52,7 @@ namespace Sticky.Models.Etc
     public static class CommonStrings
     {
         public const string Dot = ".";
-        public const string ReferrerHeader = "Referrer"
+        public const string ReferrerHeader = "Referrer";
         public const string NoHost = "NO HOST";
         public const string ContentTypeTextHtml= "text/html";
         public const string Origin = "Origin";

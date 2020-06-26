@@ -2,9 +2,9 @@
 
 namespace Sticky.API.Script.HttpMiddleware
 {
-    public static class CustomMiddlewareExtensions
+    public static class IframeMiddlewareExtension
     {
-        public static IApplicationBuilder UseCustomHanlderMiddleware
+        public static IApplicationBuilder UseIframeMiddlewareExtension
                                       (this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<IFrameHandler>();

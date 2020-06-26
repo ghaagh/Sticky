@@ -6,11 +6,11 @@ namespace Sticky.Repositories.Advertisement.Implementions
 {
     public class ClickLogger : IClickLogger
     {
-        private readonly IEncodeDecodeManager _encodeDecodeManager;
+        private readonly IUtility _utility;
         private readonly IRedisCache _redisCache;
-        public ClickLogger(IRedisCache redisCache, IEncodeDecodeManager encodeDecodeManager)
+        public ClickLogger(IRedisCache redisCache, IUtility utility)
         {
-            _encodeDecodeManager = encodeDecodeManager;
+            _utility = utility;
             _redisCache = redisCache;
         }
         public async Task IncreaseClick(string fullloghash, string uniqueId)

@@ -1,11 +1,18 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace Sticky.Repositories.Common
 {
-    /// <summary>
-    /// a utility used for encoding and decoding texts.
-    /// </summary>
-    public interface IEncodeDecodeManager
+    public interface IUtility
     {
+        /// <summary>
+        /// sometimes there is 2 dots in address and the default aut getter in .net does not separate the main part
+        /// of the address. this method is for extracting the parent domain
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        string GetTopDomainFromAddress(string address);
         /// <summary>
         /// returns a plain text of a base64 input.
         /// </summary>

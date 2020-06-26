@@ -18,5 +18,6 @@ namespace Sticky.Repositories.Common.Extensions
             }
             return sb.ToString();
         }
+
     }
 }

@@ -1,20 +1,32 @@
-﻿using System;
+﻿using Sticky.Models.Etc;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Web;
 
 namespace Sticky.Repositories.Common.Implementions
 {
-    public  class EncodeDecodeManager:IEncodeDecodeManager
+    public class Utility: IUtility
     {
-        public Random rnd = new Random(DateTime.Now.Millisecond);
-        public string GetLetter()
+        public string GetTopDomainFromAddress(string address)
+        {
+            string host = new Uri(address).Authority.ToString();
+            var topDomain = string.Empty;
+            if (host.IndexOf(CommonStrings.Dot) == host.LastIndexOf(CommonStrings.Dot))
+                topDomain = host;
+            else
+                topDomain = host.Substring(host.IndexOf(CommonStrings.Dot) + 1);
+            return topDomain;
+        }
+        private Random rnd = new Random(DateTime.Now.Millisecond);
+        private string GetLetter()
         {
             string text = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
             int index = rnd.Next(text.Length);
             return text[index].ToString();
         }
-        public  string Base64Encode(string plainText, bool hasExtraChars = false)
+        public string Base64Encode(string plainText, bool hasExtraChars = false)
         {
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             string encodedString = Convert.ToBase64String(plainTextBytes);

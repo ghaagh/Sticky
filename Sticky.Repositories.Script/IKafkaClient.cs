@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Sticky.Models.Druid;
 
-namespace Sticky.Repositories.Advertisement
+namespace Sticky.Repositories.Script
 {
-    public interface IKafkaLogger
+    public interface IKafkaClient
     {
         Task SendMessage(DruidData message);
     }

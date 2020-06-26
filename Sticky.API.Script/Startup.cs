@@ -10,6 +10,8 @@ using Sticky.Repositories.Advertisement;
 using Sticky.Repositories.Advertisement.Implementions;
 using Sticky.Repositories.Common;
 using Sticky.Repositories.Common.Implementions;
+using Sticky.Repositories.Script;
+using Sticky.Repositories.Script.Implementions;
 
 namespace Sticky.API.Script
 {
@@ -32,9 +34,11 @@ namespace Sticky.API.Script
             services.AddDbContext<StickyDbContext>(options => options.UseSqlServer(connectionString));
             services
             .AddSingleton<ITotalVisitUpdater, TotalVisitUpdater>()
+            .AddSingleton<IUtility, Utility>()
             .AddSingleton<ICrowlerCache, CrowlerCache>()
             .AddSingleton<IHostCache, HostCache>()
-            .AddSingleton<IKafkaLogger, KafkaLogger>()
+            .AddSingleton<IKafkaClient, KafkaClient>()
+            .AddSingleton<IKafkaLogProducer, KafkaLogProducer>()
             .AddSingleton<ICategoryLogger, CategoryLogger>()
             .AddSingleton<IErrorLogger, ErrorLogger>()
             .AddSingleton<IRedisCache, RedisCache>()
@@ -52,7 +56,6 @@ namespace Sticky.API.Script
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // app.UseQuartz();
             IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
@@ -61,7 +64,7 @@ namespace Sticky.API.Script
             app.MapWhen(context => context.Request.Path.ToString().EndsWith("iframe.html"),
                 appBuilder =>
                 {
-                    appBuilder.UseCustomHanlderMiddleware();
+                    appBuilder.UseIframeMiddlewareExtension();
                 });
             app.UseStaticFiles();
             app.UseMvc(routes =>

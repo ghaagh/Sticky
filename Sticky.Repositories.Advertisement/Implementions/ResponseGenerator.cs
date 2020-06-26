@@ -11,13 +11,13 @@ namespace Sticky.Repositories.Advertisement.Implementions
     public class ResponseGenerator : IResponseGenerator
     {
         private readonly AdvertisementAPISetting _setting;
-        private readonly IEncodeDecodeManager _encodeDecodeManager;
+        private readonly IUtility _utility;
 
         private readonly IAwesomeTextGenerator _awesomeTextGenerator;
-        public ResponseGenerator(IOptions<AdvertisementAPISetting> options, IEncodeDecodeManager encodeDecodeManager,IAwesomeTextGenerator awesomeTextGenerator)
+        public ResponseGenerator(IOptions<AdvertisementAPISetting> options, IUtility utility,IAwesomeTextGenerator awesomeTextGenerator)
         {
             _awesomeTextGenerator = awesomeTextGenerator;
-            _encodeDecodeManager = encodeDecodeManager;
+            _utility = utility;
             _setting = options.Value;
         }
         public async Task<MembershipResponse> CreateResponseAsync(long userId, int partnerId,  List<UserSegment> segments)
@@ -39,7 +39,7 @@ namespace Sticky.Repositories.Advertisement.Implementions
                     {
                     newMembershipRow.Products.Add(new NativeDetails()
                     {
-                        AdId =  _encodeDecodeManager.Base64Encode(item.SegmentId + "$$$" + advertisingTextData.TemplateText),
+                        AdId =  _utility.Base64Encode(item.SegmentId + "$$$" + advertisingTextData.TemplateText),
                         Image = c.ImageAddress?.Replace("m_lfit,h_350,w_350", "resize,m_pad,h_330,w_500,color_FFFFFF").Replace("m_lfit,h_500,w_500", "resize,m_pad,h_330,w_500,color_FFFFFF").
                         Replace("m_lfit,h_600,w_600", "resize,m_pad,h_330,w_500,color_FFFFFF"),
                         Price = c.Price,
@@ -47,7 +47,7 @@ namespace Sticky.Repositories.Advertisement.Implementions
                         OldPrice = c.Price,
                         OriginalProductName =_awesomeTextGenerator.Clean(c.ProductName),
                         ProductName =advertisingTextData.ProductText ,
-                        UrlAddress = $"{_setting.AdvertisementUrlBase}Click?landing={_encodeDecodeManager.Base64Encode(c.Url??"")}&segmentId={item.SegmentId}&stpd={c.Id}&uadid={_encodeDecodeManager.Base64Encode(item.SegmentId + "$$$" + advertisingTextData.TemplateText)}"
+                        UrlAddress = $"{_setting.AdvertisementUrlBase}Click?landing={_utility.Base64Encode(c.Url??"")}&segmentId={item.SegmentId}&stpd={c.Id}&uadid={_utility.Base64Encode(item.SegmentId + "$$$" + advertisingTextData.TemplateText)}"
                     }
                     );
                     }

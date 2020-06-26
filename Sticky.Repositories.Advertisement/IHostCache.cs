@@ -37,14 +37,7 @@ namespace Sticky.Repositories.Advertisement
         /// <param name="hostId"></param>
         /// <returns></returns>
         Task<HostWithoutRelation> GetHostByIdAsync(int hostId);
-        /// <summary>
-        /// returns dynamic html for Banner Request types based on host and size.
-        /// </summary>
-        /// <param name="hostId">Host Id</param>
-        /// <param name="sizeId">Size Id</param>
-        /// <returns>
-        /// an size appropiate template for replacing product info like price , name...
-        /// </returns>
+
 
     }
 }

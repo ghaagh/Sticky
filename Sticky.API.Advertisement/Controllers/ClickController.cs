@@ -10,12 +10,12 @@ namespace Sticky.API.Advertisement.Controller
     [Produces("application/json")]
     public class ClickController : ControllerBase
     {
-        private readonly IEncodeDecodeManager _encodeDecodeManager;
+        private readonly IUtility _utility;
         private readonly IClickLogger _clickLogger;
-        public ClickController(IEncodeDecodeManager encodeDecodeManager,IClickLogger clickLogger)
+        public ClickController(IUtility utility,IClickLogger clickLogger)
         {
             _clickLogger = clickLogger;
-            _encodeDecodeManager = encodeDecodeManager;
+            _utility = utility;
 
 
         }
@@ -23,7 +23,7 @@ namespace Sticky.API.Advertisement.Controller
         [Route("Click")]
         public async  Task<IActionResult> Click(string landing, int segmentId,string uadid)
         {
-            var uriBuilder = new UriBuilder(new Uri(_encodeDecodeManager.Base64Decode(landing)).AbsoluteUri);
+            var uriBuilder = new UriBuilder(new Uri(_utility.Base64Decode(landing)).AbsoluteUri);
             var query = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
             query.Remove("extraQuery");
             query.Remove("landing");
@@ -33,7 +33,7 @@ namespace Sticky.API.Advertisement.Controller
             var referer = query.Get("utm_content")??"";
             uriBuilder.Query = query.ToString();
             var finalLanding = uriBuilder.ToString();
-            await _clickLogger.IncreaseClick(segmentId+"%"+campaign+"%"+referer,string.IsNullOrEmpty(uadid)?_encodeDecodeManager.Base64Encode(segmentId+"$$$NoTemplate"):uadid);
+            await _clickLogger.IncreaseClick(segmentId+"%"+campaign+"%"+referer,string.IsNullOrEmpty(uadid)?_utility.Base64Encode(segmentId+"$$$NoTemplate"):uadid);
             return Redirect(finalLanding);
 
         }

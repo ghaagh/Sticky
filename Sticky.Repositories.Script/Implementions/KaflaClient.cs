@@ -9,24 +9,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sticky.Repositories.Advertisement.Implementions
+namespace Sticky.Repositories.Script.Implementions
 {
-    public class KafkaLogger : IKafkaLogger
+    public class KafkaClient : IKafkaClient
     {
         private readonly IRedisCache _redisCache;
         private readonly Producer<Null, string> _producer;
-        public KafkaLogger(IOptions<ScriptAPISetting> configuratoin, IRedisCache redisCache)
+        public KafkaClient(IOptions<ScriptAPISetting> configuratoin, IRedisCache redisCache)
         {
             _redisCache = redisCache;
             var kafkaaddresses = configuratoin.Value.KafkaAddress;
             var config = new Dictionary<string, object>
-      {
-        { "bootstrap.servers", kafkaaddresses}
-      };
+            {
+                { "bootstrap.servers", kafkaaddresses}
+            };
 
             _producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8));
         }
-        public KafkaLogger(IRedisCache redisCache)
+        public KafkaClient(IRedisCache redisCache)
         {
             _redisCache = redisCache;
             var config = new Dictionary<string, object>

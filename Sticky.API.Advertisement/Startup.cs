@@ -48,7 +48,7 @@ namespace Sticky.API.Advertisement
             services.AddSingleton<ISegmentCache, SegmentCache>();
             services.AddSingleton<IClickLogger, ClickLogger>();
             services.AddSingleton<IUserMembershipFinder, UserMembershipFinder>();
-            services.AddSingleton<IEncodeDecodeManager, EncodeDecodeManager>();
+            services.AddSingleton<IUtility, Utility>();
             services.AddSingleton<IHostCache, HostCache>();
             services.AddSingleton<IRedisCache, RedisCache>();
             services.AddSingleton<IProductCache, ProductCache>();

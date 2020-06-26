@@ -14,14 +14,17 @@ namespace Sticky.API.Script.HttpMiddleware
         private readonly ICrowlerCache _crowlerCache;
         private readonly IPartnerCache _partnerCache;
         private readonly IUserIdSetter _userIdSetter;
+        private readonly IUtility _utility;
         private readonly ScriptAPISetting _configuration;
         public IFrameHandler(RequestDelegate next,
             IUserIdSetter userIdSetter,
+            IUtility utility,
             ICrowlerCache crowlerCache,
             IOptions<ScriptAPISetting> configuration,
             IHostCache hostDictionary,
             IPartnerCache partnersManager)
         {
+            _utility = utility;
             _partnerCache = partnersManager;
             _hostCache = hostDictionary;
             _userIdSetter = userIdSetter;
@@ -34,7 +37,7 @@ namespace Sticky.API.Script.HttpMiddleware
             var requestHost = GetReferrer(context);
             if (ReferrerIsEmpty(requestHost))
                 return;
-            var topDomain = GetTopDomainHost(requestHost);
+            var topDomain = _utility.GetTopDomainFromAddress(requestHost);
             var host = await _hostCache.GetHostAsync(topDomain);
             if (host == null)
                 return;
@@ -61,16 +64,7 @@ namespace Sticky.API.Script.HttpMiddleware
         {
             return string.IsNullOrEmpty(referrer);
         }
-        private string GetTopDomainHost(string address)
-        {
-            string host = new Uri(address).Authority.ToString();
-            var topDomain = String.Empty;
-            if (host.IndexOf(CommonStrings.Dot) == host.LastIndexOf(CommonStrings.Dot))
-                topDomain = host;
-            else
-                topDomain = host.Substring(host.IndexOf(CommonStrings.Dot) + 1);
-            return topDomain;
-        }
+
         private async Task<long> SetNewUserCookieAsync(HttpContext context)
         {
             long newUserId = await _userIdSetter.GetNewUserIdAsync();

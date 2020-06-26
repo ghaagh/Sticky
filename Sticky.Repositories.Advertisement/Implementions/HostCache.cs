@@ -116,5 +116,6 @@ namespace Sticky.Repositories.Advertisement.Implementions
                 current = Newtonsoft.Json.JsonConvert.DeserializeObject<HostWithoutRelation>(data);
             return current;
         }
+
     }
 }

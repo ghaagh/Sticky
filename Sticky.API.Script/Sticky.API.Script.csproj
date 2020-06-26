@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sticky.Dto.Script\Sticky.Dto.Script.csproj" />
     <ProjectReference Include="..\Sticky.Repositories.Advertisement\Sticky.Repositories.Advertisement.csproj" />
+    <ProjectReference Include="..\Sticky.Repositories.Script\Sticky.Repositories.Script.csproj" />
   </ItemGroup>
 
 </Project>

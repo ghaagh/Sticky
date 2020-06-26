@@ -4,4 +4,18 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" Version="0.11.6" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sticky.Dto.Script\Sticky.Dto.Script.csproj" />
+    <ProjectReference Include="..\Sticky.Models.Druid\Sticky.Models.Druid.csproj" />
+    <ProjectReference Include="..\Sticky.Models.Etc\Sticky.Models.Etc.csproj" />
+    <ProjectReference Include="..\Sticky.Repositories.Advertisement\Sticky.Repositories.Advertisement.csproj" />
+    <ProjectReference Include="..\Sticky.Repositories.Common\Sticky.Repositories.Common.csproj" />
+  </ItemGroup>
+
 </Project>
