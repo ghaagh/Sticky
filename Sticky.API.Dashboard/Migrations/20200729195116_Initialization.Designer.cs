@@ -10,14 +10,14 @@ using Sticky.Models.Context;
 namespace Sticky.API.Dashboard.Migrations
 {
     [DbContext(typeof(StickyDbContext))]
-    [Migration("20200729182725_InitialDatabase")]
-    partial class InitialDatabase
+    [Migration("20200729195116_Initialization")]
+    partial class Initialization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -46,6 +46,22 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "f0bb0816-220c-47e1-bf2a-5f428e5f1279",
+                            Name = "ADMIN",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "0281ac24-e499-4890-9ba5-2dc9fe550b4f",
+                            Name = "HOSTOWNER",
+                            NormalizedName = "HOSTOWNER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -155,27 +171,44 @@ namespace Sticky.API.Dashboard.Migrations
             modelBuilder.Entity("Sticky.Models.Context.ActionType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("ActionTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "فقط ذخیره کن"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "همان محصولات"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "کتگوری"
+                        });
                 });
 
             modelBuilder.Entity("Sticky.Models.Context.ActivityType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActivityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -185,16 +218,48 @@ namespace Sticky.API.Dashboard.Migrations
             modelBuilder.Entity("Sticky.Models.Context.AudienceType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AudienceTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("AudienceTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AudienceTypeName = "بازدید از صفحه"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AudienceTypeName = "بازدید از محصول"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AudienceTypeName = "افزودن به سبد"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AudienceTypeName = "بازدید از کتگوری"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AudienceTypeName = "خرید"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AudienceTypeName = "افزودن به علاقه مندی ها"
+                        });
                 });
 
             modelBuilder.Entity("Sticky.Models.Context.CategoryStat", b =>
@@ -211,7 +276,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Day")
                         .HasColumnType("int");
@@ -240,7 +305,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Day")
                         .HasColumnType("int");
@@ -269,8 +334,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AddToCardId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("AddToCardValidated")
                         .HasColumnType("bit");
@@ -282,19 +346,16 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FinalizePage")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("FinalizeValidated")
                         .HasColumnType("bit");
 
                     b.Property<string>("HashCode")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HostAddress")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("HostPriority")
                         .HasColumnType("bit");
@@ -303,12 +364,10 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LogoAddress")
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoOtherData")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PageValidated")
                         .HasColumnType("bit");
@@ -326,15 +385,13 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("UserValidityId")
                         .HasColumnType("int");
 
                     b.Property<string>("ValidatingHtmlAddress")
-                        .HasColumnType("nvarchar(400)")
-                        .HasMaxLength(400);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -351,22 +408,16 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CookieSyncAddress")
-                        .HasColumnType("nvarchar(400)")
-                        .HasMaxLength(400);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Domain")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParnerHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PartnerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Verified")
                         .HasColumnType("bit");
@@ -387,7 +438,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("float");
 
                     b.Property<DateTime>("LogDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PartnerId")
                         .HasColumnType("int");
@@ -422,7 +473,6 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Template")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -440,9 +490,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Counter")
                         .HasColumnType("bigint");
@@ -468,7 +516,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PartnerId")
                         .HasColumnType("int");
@@ -486,15 +534,13 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActionExtra")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ActionId")
                         .HasColumnType("int");
 
                     b.Property<string>("AudienceExtra")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AudienceId")
                         .HasColumnType("int");
@@ -503,11 +549,10 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("HostId")
                         .HasColumnType("int");
@@ -522,9 +567,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SegmentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -547,9 +590,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CreatorUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
@@ -558,14 +599,10 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PagePattern")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(400)")
-                        .HasMaxLength(400);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PatternName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -617,18 +654,13 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("NativeLogoAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NativeLogoOtherData")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NativeText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SegmentId")
                         .HasColumnType("int");
@@ -648,9 +680,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AdSize")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Height")
                         .HasColumnType("int");
@@ -742,7 +772,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LogDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -763,8 +793,7 @@ namespace Sticky.API.Dashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)")
-                        .HasMaxLength(450);
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -831,7 +860,7 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.RecordedCategory", "Category")
                         .WithMany("CategoryStats")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("FK_CategoryStats_RecordedCategories")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -840,7 +869,7 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.Segment", "Segment")
                         .WithMany("Clicks")
                         .HasForeignKey("SegmentId")
-                        .HasConstraintName("FK_Clicks_Segments")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -848,8 +877,7 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     b.HasOne("Sticky.Models.Context.User", "User")
                         .WithMany("Hosts")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_Hosts_AspNetUsers");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Sticky.Models.Context.PartnerRequestLog", b =>
@@ -857,7 +885,7 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.Partner", "Partner")
                         .WithMany("PartnerRequestLogs")
                         .HasForeignKey("PartnerId")
-                        .HasConstraintName("FK_PartnerRequestLogs_Partners")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -866,7 +894,7 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.Segment", "Segment")
                         .WithMany("ProductTextTemplates")
                         .HasForeignKey("SegmentId")
-                        .HasConstraintName("FK_ProductTextTemplates_DruidSegments")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -875,7 +903,7 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.Host", "Host")
                         .WithMany("RecordedCategories")
                         .HasForeignKey("HostId")
-                        .HasConstraintName("FK_RecordedCategories_Hosts")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -884,19 +912,18 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.ActionType", "Action")
                         .WithMany("Segments")
                         .HasForeignKey("ActionId")
-                        .HasConstraintName("FK_DruidSegments_ActionTypes")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Sticky.Models.Context.AudienceType", "Audience")
                         .WithMany("Segments")
                         .HasForeignKey("AudienceId")
-                        .HasConstraintName("FK_DruidSegments_AudienceTypes")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Sticky.Models.Context.User", "Creator")
                         .WithMany("Segments")
-                        .HasForeignKey("CreatorId")
-                        .HasConstraintName("FK_DruidSegments_AspNetUsers");
+                        .HasForeignKey("CreatorId");
 
                     b.HasOne("Sticky.Models.Context.Host", "Host")
                         .WithMany("Segments")
@@ -909,14 +936,12 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     b.HasOne("Sticky.Models.Context.User", "CreatorUser")
                         .WithMany()
-                        .HasForeignKey("CreatorUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorUserId");
 
                     b.HasOne("Sticky.Models.Context.Host", "Host")
                         .WithMany("SegmentPagePattern")
                         .HasForeignKey("HostId")
-                        .HasConstraintName("FK_SegmentPagePattern_Hosts")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -925,7 +950,7 @@ namespace Sticky.API.Dashboard.Migrations
                     b.HasOne("Sticky.Models.Context.Segment", "Segments")
                         .WithMany("SegmentStaticNatives")
                         .HasForeignKey("SegmentId")
-                        .HasConstraintName("FK_SegmentStaticNatives_Segments")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -933,13 +958,11 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     b.HasOne("Sticky.Models.Context.Host", "Host")
                         .WithMany("UsersHostAccess")
-                        .HasForeignKey("HostId")
-                        .HasConstraintName("FK_UsersHostAccess_Hosts");
+                        .HasForeignKey("HostId");
 
                     b.HasOne("Sticky.Models.Context.User", "User")
                         .WithMany("UsersHostAccesses")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_UsersHostAccess_AspNetUsers");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

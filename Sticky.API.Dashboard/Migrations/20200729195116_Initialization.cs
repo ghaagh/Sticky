@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sticky.API.Dashboard.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class Initialization : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,8 +11,9 @@ namespace Sticky.API.Dashboard.Migrations
                 name: "ActionTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(maxLength: 200, nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -23,8 +24,9 @@ namespace Sticky.API.Dashboard.Migrations
                 name: "ActivityTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    ActivityName = table.Column<string>(maxLength: 100, nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ActivityName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,8 +76,9 @@ namespace Sticky.API.Dashboard.Migrations
                 name: "AudienceTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    AudienceTypeName = table.Column<string>(maxLength: 200, nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AudienceTypeName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -88,10 +91,10 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PartnerName = table.Column<string>(maxLength: 50, nullable: false),
-                    ParnerHash = table.Column<string>(maxLength: 128, nullable: false),
-                    Domain = table.Column<string>(maxLength: 50, nullable: true),
-                    CookieSyncAddress = table.Column<string>(maxLength: 400, nullable: true),
+                    PartnerName = table.Column<string>(nullable: true),
+                    ParnerHash = table.Column<string>(nullable: true),
+                    Domain = table.Column<string>(nullable: true),
+                    CookieSyncAddress = table.Column<string>(nullable: true),
                     Verified = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
@@ -106,7 +109,7 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PartnerId = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     Counter = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -139,7 +142,7 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AdSize = table.Column<string>(maxLength: 100, nullable: false),
+                    AdSize = table.Column<string>(nullable: true),
                     Width = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false)
                 },
@@ -155,7 +158,7 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     HostId = table.Column<int>(nullable: false),
-                    LogDate = table.Column<DateTime>(type: "date", nullable: false),
+                    LogDate = table.Column<DateTime>(nullable: false),
                     Count = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -275,24 +278,24 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(maxLength: 450, nullable: true),
-                    HostAddress = table.Column<string>(maxLength: 100, nullable: true),
-                    HashCode = table.Column<string>(maxLength: 450, nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    HostAddress = table.Column<string>(nullable: true),
+                    HashCode = table.Column<string>(nullable: true),
                     HostValidated = table.Column<bool>(nullable: false),
                     PageValidated = table.Column<bool>(nullable: false),
                     ProductValidated = table.Column<bool>(nullable: false),
                     CategoryValidated = table.Column<bool>(nullable: false),
                     AddToCardValidated = table.Column<bool>(nullable: false),
                     FinalizeValidated = table.Column<bool>(nullable: false),
-                    ValidatingHtmlAddress = table.Column<string>(maxLength: 400, nullable: true),
+                    ValidatingHtmlAddress = table.Column<string>(nullable: true),
                     FavValidated = table.Column<bool>(nullable: true),
-                    AddToCardId = table.Column<string>(maxLength: 100, nullable: true),
-                    FinalizePage = table.Column<string>(maxLength: 100, nullable: true),
+                    AddToCardId = table.Column<string>(nullable: true),
+                    FinalizePage = table.Column<string>(nullable: true),
                     UserValidityId = table.Column<int>(nullable: true),
                     ProductValidityId = table.Column<int>(nullable: true),
                     HostPriority = table.Column<bool>(nullable: true),
-                    LogoAddress = table.Column<string>(maxLength: 2000, nullable: true),
-                    LogoOtherData = table.Column<string>(maxLength: 100, nullable: true),
+                    LogoAddress = table.Column<string>(nullable: true),
+                    LogoOtherData = table.Column<string>(nullable: true),
                     ProductImageWidth = table.Column<int>(nullable: true),
                     ProductImageHeight = table.Column<int>(nullable: true)
                 },
@@ -300,7 +303,7 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_Hosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Hosts_AspNetUsers",
+                        name: "FK_Hosts_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -313,7 +316,7 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LogDate = table.Column<DateTime>(type: "date", nullable: false),
+                    LogDate = table.Column<DateTime>(nullable: false),
                     PartnerId = table.Column<int>(nullable: false),
                     TotalRequestsCounter = table.Column<int>(nullable: false),
                     TotalResponse = table.Column<int>(nullable: false),
@@ -323,11 +326,11 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_PartnerRequestLogs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PartnerRequestLogs_Partners",
+                        name: "FK_PartnerRequestLogs_Partners_PartnerId",
                         column: x => x.PartnerId,
                         principalTable: "Partners",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -337,18 +340,18 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     HostId = table.Column<int>(nullable: false),
-                    CategoryName = table.Column<string>(maxLength: 200, nullable: false),
+                    CategoryName = table.Column<string>(nullable: true),
                     Counter = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RecordedCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RecordedCategories_Hosts",
+                        name: "FK_RecordedCategories_Hosts_HostId",
                         column: x => x.HostId,
                         principalTable: "Hosts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -357,10 +360,10 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatternName = table.Column<string>(maxLength: 100, nullable: false),
-                    PagePattern = table.Column<string>(maxLength: 400, nullable: false),
+                    PatternName = table.Column<string>(nullable: true),
+                    PagePattern = table.Column<string>(nullable: true),
                     HostId = table.Column<int>(nullable: false),
-                    CreatorUserId = table.Column<string>(maxLength: 450, nullable: false),
+                    CreatorUserId = table.Column<string>(nullable: true),
                     Deleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -371,13 +374,13 @@ namespace Sticky.API.Dashboard.Migrations
                         column: x => x.CreatorUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SegmentPagePattern_Hosts",
+                        name: "FK_SegmentPagePattern_Hosts_HostId",
                         column: x => x.HostId,
                         principalTable: "Hosts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -387,13 +390,13 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     HostId = table.Column<int>(nullable: false),
-                    SegmentName = table.Column<string>(maxLength: 100, nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    CreatorId = table.Column<string>(maxLength: 450, nullable: true),
+                    SegmentName = table.Column<string>(nullable: true),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<string>(nullable: true),
                     AudienceId = table.Column<int>(nullable: false),
                     ActionId = table.Column<int>(nullable: false),
-                    AudienceExtra = table.Column<string>(maxLength: 200, nullable: true),
-                    ActionExtra = table.Column<string>(maxLength: 200, nullable: true),
+                    AudienceExtra = table.Column<string>(nullable: true),
+                    ActionExtra = table.Column<string>(nullable: true),
                     Paused = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsPublic = table.Column<bool>(nullable: false),
@@ -403,19 +406,19 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_Segments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DruidSegments_ActionTypes",
+                        name: "FK_Segments_ActionTypes_ActionId",
                         column: x => x.ActionId,
                         principalTable: "ActionTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DruidSegments_AudienceTypes",
+                        name: "FK_Segments_AudienceTypes_AudienceId",
                         column: x => x.AudienceId,
                         principalTable: "AudienceTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DruidSegments_AspNetUsers",
+                        name: "FK_Segments_AspNetUsers_CreatorId",
                         column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -434,7 +437,7 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(maxLength: 450, nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                     HostId = table.Column<int>(nullable: true),
                     AdminAccess = table.Column<bool>(nullable: false)
                 },
@@ -442,13 +445,13 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_UsersHostAccess", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UsersHostAccess_Hosts",
+                        name: "FK_UsersHostAccess_Hosts_HostId",
                         column: x => x.HostId,
                         principalTable: "Hosts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UsersHostAccess_AspNetUsers",
+                        name: "FK_UsersHostAccess_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -462,7 +465,7 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryId = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(type: "date", nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     Year = table.Column<int>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Day = table.Column<int>(nullable: false),
@@ -472,11 +475,11 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_CategoryStats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CategoryStats_RecordedCategories",
+                        name: "FK_CategoryStats_RecordedCategories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "RecordedCategories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -486,7 +489,7 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SegmentId = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     Year = table.Column<int>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Day = table.Column<int>(nullable: false),
@@ -496,11 +499,11 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_Clicks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clicks_Segments",
+                        name: "FK_Clicks_Segments_SegmentId",
                         column: x => x.SegmentId,
                         principalTable: "Segments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -510,7 +513,7 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SegmentId = table.Column<int>(nullable: false),
-                    Template = table.Column<string>(nullable: false),
+                    Template = table.Column<string>(nullable: true),
                     MinPrice = table.Column<int>(nullable: true),
                     MaxPrice = table.Column<int>(nullable: true)
                 },
@@ -518,11 +521,11 @@ namespace Sticky.API.Dashboard.Migrations
                 {
                     table.PrimaryKey("PK_ProductTextTemplates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductTextTemplates_DruidSegments",
+                        name: "FK_ProductTextTemplates_Segments_SegmentId",
                         column: x => x.SegmentId,
                         principalTable: "Segments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -532,19 +535,51 @@ namespace Sticky.API.Dashboard.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SegmentId = table.Column<int>(nullable: false),
-                    NativeText = table.Column<string>(maxLength: 50, nullable: false),
-                    NativeLogoAddress = table.Column<string>(maxLength: 1000, nullable: false),
-                    NativeLogoOtherData = table.Column<string>(maxLength: 50, nullable: true)
+                    NativeText = table.Column<string>(nullable: true),
+                    NativeLogoAddress = table.Column<string>(nullable: true),
+                    NativeLogoOtherData = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SegmentStaticNatives", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SegmentStaticNatives_Segments",
+                        name: "FK_SegmentStaticNatives_Segments_SegmentId",
                         column: x => x.SegmentId,
                         principalTable: "Segments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "ActionTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "فقط ذخیره کن" },
+                    { 2, "همان محصولات" },
+                    { 3, "کتگوری" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "1", "f0bb0816-220c-47e1-bf2a-5f428e5f1279", "ADMIN", "ADMIN" },
+                    { "2", "0281ac24-e499-4890-9ba5-2dc9fe550b4f", "HOSTOWNER", "HOSTOWNER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AudienceTypes",
+                columns: new[] { "Id", "AudienceTypeName" },
+                values: new object[,]
+                {
+                    { 1, "بازدید از صفحه" },
+                    { 2, "بازدید از محصول" },
+                    { 3, "افزودن به سبد" },
+                    { 4, "بازدید از کتگوری" },
+                    { 5, "خرید" },
+                    { 6, "افزودن به علاقه مندی ها" }
                 });
 
             migrationBuilder.CreateIndex(

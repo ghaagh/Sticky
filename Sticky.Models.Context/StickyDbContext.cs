@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ApiRoles = Sticky.Models.Etc.Roles;
 namespace Sticky.Models.Context
 {
     public partial class StickyDbContext : IdentityDbContext<User>
@@ -41,239 +41,22 @@ namespace Sticky.Models.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
-
-            modelBuilder.Entity<ActionType>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200);
-            });
-
-            modelBuilder.Entity<ActivityType>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.ActivityName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-            });
-            modelBuilder.Entity<AudienceType>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.AudienceTypeName)
-                    .IsRequired()
-                    .HasMaxLength(200);
-            });
-
-            modelBuilder.Entity<CategoryStat>(entity =>
-            {
-                entity.Property(e => e.Date).HasColumnType("date");
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.CategoryStats)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CategoryStats_RecordedCategories");
-            });
-
-            modelBuilder.Entity<Click>(entity =>
-            {
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Segment)
-                    .WithMany(p => p.Clicks)
-                    .HasForeignKey(d => d.SegmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Clicks_Segments");
-            });
-
-            modelBuilder.Entity<Segment>(entity =>
-            {
-                entity.Property(e => e.ActionExtra).HasMaxLength(200);
-
-                entity.Property(e => e.AudienceExtra).HasMaxLength(200);
-
-                entity.Property(e => e.CreateDate).HasColumnType("datetime");
-
-                entity.Property(e => e.CreatorId).HasMaxLength(450);
-
-                entity.Property(e => e.SegmentName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.HasOne(d => d.Action)
-                    .WithMany(p => p.Segments)
-                    .HasForeignKey(d => d.ActionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_DruidSegments_ActionTypes");
-
-                entity.HasOne(d => d.Audience)
-                    .WithMany(p => p.Segments)
-                    .HasForeignKey(d => d.AudienceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_DruidSegments_AudienceTypes");
-
-                entity.HasOne(d => d.Creator)
-                    .WithMany(p => p.Segments)
-                    .HasForeignKey(d => d.CreatorId)
-                    .HasConstraintName("FK_DruidSegments_AspNetUsers");
-            });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Id = "1",Name= ApiRoles.Admin,NormalizedName=ApiRoles.Admin });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Id = "2", Name = ApiRoles.HostOwner, NormalizedName = ApiRoles.HostOwner });
+            
+            modelBuilder.Entity<AudienceType>().HasData(new AudienceType { Id = 1, AudienceTypeName = "بازدید از صفحه" });
+            modelBuilder.Entity<AudienceType>().HasData(new AudienceType { Id = 2, AudienceTypeName = "بازدید از محصول" });
+            modelBuilder.Entity<AudienceType>().HasData(new AudienceType { Id = 3, AudienceTypeName = "افزودن به سبد" });
+            modelBuilder.Entity<AudienceType>().HasData(new AudienceType { Id = 4, AudienceTypeName = "بازدید از کتگوری" });
+            modelBuilder.Entity<AudienceType>().HasData(new AudienceType { Id = 5, AudienceTypeName = "خرید" });
+            modelBuilder.Entity<AudienceType>().HasData(new AudienceType { Id = 6, AudienceTypeName = "افزودن به علاقه مندی ها" });
+            
+            modelBuilder.Entity<ActionType>().HasData(new ActionType { Id = 1, Name = "فقط ذخیره کن" });
+            modelBuilder.Entity<ActionType>().HasData(new ActionType { Id = 2, Name = "همان محصولات" });
+            modelBuilder.Entity<ActionType>().HasData(new ActionType { Id = 3, Name = "کتگوری" });
 
 
-            modelBuilder.Entity<Host>(entity =>
-            {
-                entity.Property(e => e.AddToCardId).HasMaxLength(100);
-
-                entity.Property(e => e.FinalizePage).HasMaxLength(100);
-
-                entity.Property(e => e.HashCode).HasMaxLength(450);
-
-                entity.Property(e => e.HostAddress).HasMaxLength(100);
-
-                entity.Property(e => e.LogoAddress).HasMaxLength(2000);
-
-                entity.Property(e => e.LogoOtherData).HasMaxLength(100);
-
-                entity.Property(e => e.UserId).HasMaxLength(450);
-
-                entity.Property(e => e.ValidatingHtmlAddress).HasMaxLength(400);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Hosts)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Hosts_AspNetUsers");
-            });
-
-
-            modelBuilder.Entity<PartnerRequestLog>(entity =>
-            {
-                entity.Property(e => e.LogDate).HasColumnType("date");
-
-                entity.HasOne(d => d.Partner)
-                    .WithMany(p => p.PartnerRequestLogs)
-                    .HasForeignKey(d => d.PartnerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PartnerRequestLogs_Partners");
-            });
-
-            modelBuilder.Entity<Partner>(entity =>
-            {
-                entity.Property(e => e.CookieSyncAddress).HasMaxLength(400);
-
-                entity.Property(e => e.Domain).HasMaxLength(50);
-
-                entity.Property(e => e.ParnerHash)
-                    .IsRequired()
-                    .HasMaxLength(128);
-
-                entity.Property(e => e.PartnerName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ProductTextTemplate>(entity =>
-            {
-                entity.Property(e => e.Template).IsRequired();
-
-                entity.HasOne(d => d.Segment)
-                    .WithMany(p => p.ProductTextTemplates)
-                    .HasForeignKey(d => d.SegmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductTextTemplates_DruidSegments");
-            });
-
-            modelBuilder.Entity<RecordedCategory>(entity =>
-            {
-                entity.Property(e => e.CategoryName)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.HasOne(d => d.Host)
-                    .WithMany(p => p.RecordedCategories)
-                    .HasForeignKey(d => d.HostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_RecordedCategories_Hosts");
-            });
-
-            modelBuilder.Entity<ResponseLogger>(entity =>
-            {
-                entity.Property(e => e.Date).HasColumnType("datetime");
-            });
-            modelBuilder.Entity<SegmentPagePattern>(entity =>
-            {
-                entity.Property(e => e.CreatorUserId)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.PagePattern)
-                    .IsRequired()
-                    .HasMaxLength(400);
-
-                entity.Property(e => e.PatternName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-              
-
-                entity.HasOne(d => d.Host)
-                    .WithMany(p => p.SegmentPagePattern)
-                    .HasForeignKey(d => d.HostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SegmentPagePattern_Hosts");
-            });
-
-            modelBuilder.Entity<SegmentStaticNative>(entity =>
-            {
-                entity.Property(e => e.NativeLogoAddress)
-                    .IsRequired()
-                    .HasMaxLength(1000);
-
-                entity.Property(e => e.NativeLogoOtherData).HasMaxLength(50);
-
-                entity.Property(e => e.NativeText)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Segments)
-                    .WithMany(p => p.SegmentStaticNatives)
-                    .HasForeignKey(d => d.SegmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SegmentStaticNatives_Segments");
-            });
-            modelBuilder.Entity<Size>(entity =>
-            {
-                entity.Property(e => e.AdSize)
-                    .IsRequired()
-                    .HasMaxLength(100);
-            });
-
-
-
-            modelBuilder.Entity<UserTotalVisit>(entity =>
-            {
-                entity.Property(e => e.LogDate).HasColumnType("date");
-            });
-
-            modelBuilder.Entity<UsersHostAccess>(entity =>
-            {
-                entity.Property(e => e.UserId).HasMaxLength(450);
-
-                entity.HasOne(d => d.Host)
-                    .WithMany(p => p.UsersHostAccess)
-                    .HasForeignKey(d => d.HostId)
-                    .HasConstraintName("FK_UsersHostAccess_Hosts");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UsersHostAccesses)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_UsersHostAccess_AspNetUsers");
-            });
         }
     }
 }
