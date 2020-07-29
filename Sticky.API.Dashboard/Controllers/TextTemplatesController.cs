@@ -22,7 +22,11 @@ namespace DashboardAPI.Controllers
             _userManager = userManager;
             _textTemplateManager = textTemplateManager;
         }
-
+        /// <summary>
+        /// returns list of text templates assigned to a segment
+        /// </summary>
+        /// <param name="segmentId">segment id</param>
+        /// <returns></returns>
         [HttpGet("{segmentId}")]
         public async Task<TextTemplateResponseV2> List(int segmentId)
         {

@@ -50,6 +50,13 @@ namespace Sticky.API.CookieSyncing
             app.UseHttpsRedirection();
             app.MapWhen(c => c.Request.Path.ToString().EndsWith("sync.html"), b => { b.UserCookieSyncing(); });
             app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+            });
         }
     }
     public static class CustomMiddlewareExtensions

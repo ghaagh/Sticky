@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sticky.API.Advertisement</name>
+    </assembly>
+    <members>
+        <member name="M:Sticky.API.Advertisement.Controller.UserMembershipsController.GetUserSegment(Sticky.Dto.Advertisement.Request.UserMembershipsRequest)">
+             <summary>
+             returns cached membership data for requested user base on userId(or partner userId) 
+             </summary>
+             <param name="request">
+             something like this :
+             {
+            "StickyUserId": "68747321",
+            "PartnerUserId": null,
+            "PartnerHashCode": "12fe9740-1145-4adc-906d-cf2592afa5c4",
+             }
+             </param>
+             <returns>
+             a response  empty or full with products 
+             </returns>
+        </member>
+    </members>
+</doc>

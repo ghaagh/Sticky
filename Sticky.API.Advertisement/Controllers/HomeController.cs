@@ -6,7 +6,6 @@ namespace Sticky.API.Advertisement.Controller
     public class HomeController : ControllerBase
     {
         [HttpGet("Index")]
-        [Route("Index")]
         public string Index()
         {
             return "hello to you too ;)";

@@ -23,6 +23,10 @@ using Sticky.Repositories.Dashboard.Implementions;
 using Sticky.Repositories.Common;
 using Sticky.Repositories.Common.Implementions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
 
 namespace Sticky.API.Dashboard
 {
@@ -44,6 +48,8 @@ namespace Sticky.API.Dashboard
             var connectionString = appSetting.Get<DashboardAPISetting>().ConnectionString;
             services.AddDbContext<StickyDbContext>(options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Sticky.API.Dashboard")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<StickyDbContext>().AddDefaultTokenProviders();
+            services.AddSingleton<IApiDescriptionGroupCollectionProvider, ApiDescriptionGroupCollectionProvider>();
+            services.AddTransient<IApiDescriptionProvider, DefaultApiDescriptionProvider>();
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,14 +78,18 @@ namespace Sticky.API.Dashboard
                     .AddScoped<IAudienceTypeManager, AudienceTypeManager>()
                     .AddScoped<IHostDataExtractor, HostDataExtractor>()
                     .AddRazorPages();
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Sticky Dashboard API",
-                    Description = "CRUD EndPoint for accessing retargeting features in panel",
-
+                    Title = "Dashboard API",
+                    Description = "For managing segments and websites",
+                    TermsOfService = new Uri("https://example.com/terms"),
                 });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -98,7 +108,10 @@ namespace Sticky.API.Dashboard
             {
                 app.UseHsts();
             }
-            app.UseSwagger();
+                app.UseSwagger(c =>
+    {
+        c.SerializeAsV2 = true;
+    });
 
             app.UseSwaggerUI(c =>
             {
@@ -107,6 +120,13 @@ namespace Sticky.API.Dashboard
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+            });
         }
     }
 }
