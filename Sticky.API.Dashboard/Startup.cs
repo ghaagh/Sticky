@@ -22,6 +22,7 @@ using Sticky.Repositories.Dashboard;
 using Sticky.Repositories.Dashboard.Implementions;
 using Sticky.Repositories.Common;
 using Sticky.Repositories.Common.Implementions;
+using Microsoft.Extensions.Hosting;
 
 namespace Sticky.API.Dashboard
 {
@@ -70,9 +71,9 @@ namespace Sticky.API.Dashboard
                     .AddScoped<IActionTypeManager, ActionTypeManager>()
                     .AddScoped<IAudienceTypeManager, AudienceTypeManager>()
                     .AddScoped<IHostDataExtractor, HostDataExtractor>()
-                    .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                    .AddRazorPages();
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Sticky Dashboard API",
@@ -87,7 +88,7 @@ namespace Sticky.API.Dashboard
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -105,7 +106,7 @@ namespace Sticky.API.Dashboard
             });
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseRouting();
         }
     }
 }

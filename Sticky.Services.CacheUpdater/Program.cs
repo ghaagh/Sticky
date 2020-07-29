@@ -1,22 +1,23 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Sticky.Repositories.Common.Implementions;
-using System.Threading;
+﻿
 using System.Collections.Generic;
 using Sticky.Repositories.Common;
 using Sticky.Repositories.Advertisement.Implementions;
 using Sticky.Repositories.Advertisement;
+using System.Threading.Tasks;
+using System.Threading;
+using System;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Sticky.Repositories.Common.Implementions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Sticky.Services.CacheUpdater
 {
     public class Program
-   {
+    {
 
         static void Main()
-        {
+       {
             Update().GetAwaiter().GetResult();
         }
         /// <summary>
@@ -38,15 +39,15 @@ namespace Sticky.Services.CacheUpdater
             while (true)
             {
                 List<Task> tasks = new List<Task>
-                {
-                    new SegmentCache(_redisCache).Initial(connectionString),
-                    new HostScriptChecker(_redisCache).Initial(connectionString),
-                    new HostCache(_redisCache).Initial(connectionString),
-                    new PartnerCache(_redisCache).Initial(connectionString),
-                    new TotalVisitUpdater(_redisCache, _hostCache).FlushToSql(connectionString),
-                    new AwesomeTextGenerator(_redisCache).Initial(connectionString),
-                    new CategoryLogger(_redisCache).FlushToSql(connectionString)
-                };
+                            {
+                                new SegmentCache(_redisCache).Initial(connectionString),
+                                new HostScriptChecker(_redisCache).Initial(connectionString),
+                                new HostCache(_redisCache).Initial(connectionString),
+                                new PartnerCache(_redisCache).Initial(connectionString),
+                                new TotalVisitUpdater(_redisCache, _hostCache).FlushToSql(connectionString),
+                                new AwesomeTextGenerator(_redisCache).Initial(connectionString),
+                                new CategoryLogger(_redisCache).FlushToSql(connectionString)
+                            };
 
                 await Task.WhenAll(tasks);
                 Thread.Sleep(TimeSpan.FromMinutes(interval));

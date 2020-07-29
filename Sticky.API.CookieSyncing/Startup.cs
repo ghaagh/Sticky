@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using Sticky.API.CookieSyncing.HttpMiddleware;
 using Sticky.Models.Etc;
@@ -25,7 +26,7 @@ namespace Sticky.API.CookieSyncing
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddRazorPages();
             services.Configure<CookieSyncingAPISetting>(Configuration.GetSection("Setting"));
             var client = new MongoClient("mongodb://localhost/");
             services.AddSingleton<IMongoClient, MongoClient>(c => client);
@@ -35,7 +36,7 @@ namespace Sticky.API.CookieSyncing
             services.AddSingleton<IUserIdSetter, UserIdSetter>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -48,11 +49,7 @@ namespace Sticky.API.CookieSyncing
 
             app.UseHttpsRedirection();
             app.MapWhen(c => c.Request.Path.ToString().EndsWith("sync.html"), b => { b.UserCookieSyncing(); });
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseRouting();
         }
     }
     public static class CustomMiddlewareExtensions

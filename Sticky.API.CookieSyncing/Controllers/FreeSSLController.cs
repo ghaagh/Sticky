@@ -6,8 +6,8 @@ namespace Sticky.API.CookieSyncing.Controllers
 {
     public class FreeSSLController : Controller
     {
-        private readonly IHostingEnvironment _env;
-        public FreeSSLController(IHostingEnvironment env)
+        private readonly IWebHostEnvironment _env;
+        public FreeSSLController(IWebHostEnvironment env)
         {
             _env = env;
         }

@@ -6,8 +6,8 @@ namespace Sticky.API.Advertisement.Controller
 {
     public class FreeSSLController : ControllerBase
     {
-        private readonly IHostingEnvironment _env;
-        public FreeSSLController(IHostingEnvironment env)
+        private readonly IWebHostEnvironment _env;
+        public FreeSSLController(IWebHostEnvironment env)
         {
             _env = env;
         }

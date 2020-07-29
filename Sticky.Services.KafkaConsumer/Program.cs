@@ -68,7 +68,7 @@ namespace Sticky.Services.KafkaConsumer
                             {
                                 pagedSegments = (await segmentCache.GetAllActiveSegments()).Where(x => x.AudienceId == 1 && !string.IsNullOrEmpty(x.AudienceExtra)).ToList();
                             }
-                            DruidData data = Newtonsoft.Json.JsonConvert.DeserializeObject<DruidData>(cr.Value);
+                            DruidData data = Newtonsoft.Json.JsonConvert.DeserializeObject<DruidData>(cr.Message.Value);
                             if (data != null)
                             {
                                 Key matchKey = new Key("Sticky", "Activity", $"{ data.UserId }_{data.HostId}");

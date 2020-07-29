@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -56,10 +57,10 @@ namespace Sticky.API.Advertisement
             services.AddSingleton<ICookieSyncCache, CookieSyncCache>();
             var client = new MongoClient("mongodb://localhost/");
             services.AddSingleton<IMongoClient, MongoClient>(c => client);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddRazorPages();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Sticky Advertisement API",
@@ -70,7 +71,7 @@ namespace Sticky.API.Advertisement
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -90,7 +91,7 @@ namespace Sticky.API.Advertisement
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sticky Advertisement API V1");
             });
-            app.UseMvc();
+            app.UseRouting();
         }
     }
 }

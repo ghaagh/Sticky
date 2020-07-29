@@ -54,11 +54,10 @@ namespace Sticky.API.Script
             return new HostCache(rediscache).HostExists(host);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             IServiceScopeFactory serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             app.UseDeveloperExceptionPage();
-            app.UseDatabaseErrorPage();
             app.UseCors(builder => builder.SetIsOriginAllowed(SetOriginAllowed).AllowAnyHeader().AllowAnyMethod());
 
             app.MapWhen(context => context.Request.Path.ToString().EndsWith("iframe.html"),
@@ -67,12 +66,7 @@ namespace Sticky.API.Script
                     appBuilder.UseIframeMiddlewareExtension();
                 });
             app.UseStaticFiles();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseRouting();
         }
     }
 }
