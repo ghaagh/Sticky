@@ -14,7 +14,7 @@
 **Partner**:  the network who is using sticky to view dynamic ad to a user.\
 **Cookie Matching**:  a way for a network to match their user with Sticky Id. 
  ## Requirements
- '*' means **not interchangeable** to other provider or framework.
+ '*' means **not changable** to other provider or framework.
   - .*[NET Core 5](https://dotnet.microsoft.com/download/dotnet/5.0). 
   - A non-relational database for saving cookie matching data. (Currently [MongoDb](https://www.mongodb.com/) has been implemented).
   - *[Druid](https://druid.apache.org/) for recording all the user activities in a host.
