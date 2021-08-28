@@ -16,17 +16,13 @@ namespace Sticky.Infrastructure.Redis
 
         public async Task<string> GetLast(ResponseUpdaterTypeEnum type, string exludedId="")
         {
-            switch (type)
+            return type switch
             {
-                case ResponseUpdaterTypeEnum.ProductAndPage:
-                    return await _db.ListRightPopAsync($"Empty_General");
-                case ResponseUpdaterTypeEnum.Category:
-                    return await _db.ListRightPopAsync($"Empty_Category");
-                case ResponseUpdaterTypeEnum.SpecialSegment:
-                    return await _db.ListRightPopAsync($"Empty_{exludedId}");
-                default:
-                    throw new Exception("Type is not declared");
-            }
+                ResponseUpdaterTypeEnum.ProductAndPage => await _db.ListRightPopAsync($"Empty_General"),
+                ResponseUpdaterTypeEnum.Category => await _db.ListRightPopAsync($"Empty_Category"),
+                ResponseUpdaterTypeEnum.SpecialSegment => await _db.ListRightPopAsync($"Empty_{exludedId}"),
+                _ => throw new Exception("Type is not declared"),
+            };
         }
 
         public async Task EnqueRequest(long request, ResponseUpdaterTypeEnum type, string excludedId = "")

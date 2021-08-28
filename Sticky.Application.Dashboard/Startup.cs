@@ -43,7 +43,9 @@ namespace Sticky.Application.Dashboard
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             app.UseSwagger();
             var swaggerConfig = Configuration.GetSection("Swagger").Get<SwaggerConfig>();

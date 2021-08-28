@@ -8,8 +8,8 @@ namespace Sticky.Infrastructure.Sql.Repositories
 {
     class UserRepository : IUserRepository
     {
-        private UserManager<User> _userManager;
-        public UserRepository(UserManager<User> userManager)
+        private readonly UserManager<IIdentity> _userManager;
+        public UserRepository(UserManager<IIdentity> userManager)
         {
             _userManager = userManager;
         }
@@ -25,7 +25,7 @@ namespace Sticky.Infrastructure.Sql.Repositories
         public async Task<IIdentity> FindByIdAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            throw new UserNotFoundException();
+            return user;
 
             //if (user == null)
             //    throw new UserNotFoundException();

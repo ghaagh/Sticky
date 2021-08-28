@@ -35,7 +35,7 @@ namespace Sticky.Application.Advertising.Services
 
         public async Task<IEnumerable<Membership>> GetByStickyUserIdAsync(long stickyId)
         {
-            List<Membership> memberships = new List<Membership>();
+            var memberships = new List<Membership>();
             var general = await _responseRepositoy.GetMembership(ResponseUpdaterTypeEnum.ProductAndPage, stickyId);
             if (general.Any())
                 memberships.AddRange(general);
@@ -67,19 +67,19 @@ namespace Sticky.Application.Advertising.Services
                     };
                     foreach (var c in item.Products)
                     {
-                        var advertisingTextData = await _adTextGenerator.CreateAdvertisingText(item.SegmentId, c.ProductName, c.Price);
+                        var (finalName, templateId) = await _adTextGenerator.CreateAdvertisingText(item.SegmentId, c.ProductName, c.Price);
                         if (c.Image != null)
                         {
                             adReadyMembershipItem.Products.Add(new MemberShipProduct()
                             {
-                                AdId = _encodeDecodeManager.Base64Encode(item.SegmentId + "$$$" + advertisingTextData.templateId),
+                                AdId = _encodeDecodeManager.Base64Encode(item.SegmentId + "$$$" + templateId),
                                 Image = c.Image,
                                 Price = c.Price,
                                 ProductId = c.ProductId,
                                 OldPrice = c.Price,
                                 OriginalProductName = _adTextGenerator.Clean(c.ProductName),
-                                ProductName = advertisingTextData.finalName,
-                                UrlAddress = $"{_setting.UrlBase}Click?landing={_encodeDecodeManager.Base64Encode(c.UrlAddress ?? "")}&segmentId={item.SegmentId}&stpd={c.ProductId}&uadid={_encodeDecodeManager.Base64Encode(item.SegmentId + "$$$" + advertisingTextData.templateId)}"
+                                ProductName = finalName,
+                                UrlAddress = $"{_setting.UrlBase}Click?landing={_encodeDecodeManager.Base64Encode(c.UrlAddress ?? "")}&segmentId={item.SegmentId}&stpd={c.ProductId}&uadid={_encodeDecodeManager.Base64Encode(item.SegmentId + "$$$" + templateId)}"
                             }
                             );
                         }

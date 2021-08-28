@@ -18,31 +18,23 @@ namespace Sticky.Infrastructure.Redis
         }
         public async Task<IEnumerable<Membership>> GetMembership(ResponseUpdaterTypeEnum responseType, long stickyId)
         {
-            switch (responseType)
+            return responseType switch
             {
-                case ResponseUpdaterTypeEnum.ProductAndPage:
-                    return await GetGeneralUserMembership(stickyId);
-                case ResponseUpdaterTypeEnum.Category:
-                    return await GetCategoryMembership(stickyId);
-                case ResponseUpdaterTypeEnum.SpecialSegment:
-                    return await GetExcludedSegmentMembership(stickyId);
-                default:
-                    throw new Exception("Type is not specified");
-            }
+                ResponseUpdaterTypeEnum.ProductAndPage => await GetGeneralUserMembership(stickyId),
+                ResponseUpdaterTypeEnum.Category => await GetCategoryMembership(stickyId),
+                ResponseUpdaterTypeEnum.SpecialSegment => await GetExcludedSegmentMembership(stickyId),
+                _ => throw new Exception("Type is not specified"),
+            };
         }
         public async Task<bool> ExistAsync(ResponseUpdaterTypeEnum responseType, long stickyId, string excludedId = "")
         {
-            switch (responseType)
+            return responseType switch
             {
-                case ResponseUpdaterTypeEnum.ProductAndPage:
-                    return await _db.KeyExistsAsync($"Full_General:{stickyId}");
-                case ResponseUpdaterTypeEnum.Category:
-                    return await _db.KeyExistsAsync($"Full_Category:{stickyId}");
-                case ResponseUpdaterTypeEnum.SpecialSegment:
-                    return await _db.KeyExistsAsync($"Full_{excludedId}:{stickyId}");
-                default:
-                    throw new Exception("Type is not specified");
-            }
+                ResponseUpdaterTypeEnum.ProductAndPage => await _db.KeyExistsAsync($"Full_General:{stickyId}"),
+                ResponseUpdaterTypeEnum.Category => await _db.KeyExistsAsync($"Full_Category:{stickyId}"),
+                ResponseUpdaterTypeEnum.SpecialSegment => await _db.KeyExistsAsync($"Full_{excludedId}:{stickyId}"),
+                _ => throw new Exception("Type is not specified"),
+            };
         }
         public async Task SetMembership(ResponseUpdaterTypeEnum responseType, long stickyId, List<Membership> memberships, int emptyResponseExpireInMunites, int fullResponseExpireInMinute, string excludedId = "")
         {
@@ -80,7 +72,7 @@ namespace Sticky.Infrastructure.Redis
 
             //For every response updater that is running for exclusive segment we have to have a key of its segmentId into this database;
             var excludedSegments = await _excludedSegmentDatabase.StringGetAsync("ExcludedSegments");
-            List<Membership> membershipData = new List<Membership>();
+            var membershipData = new List<Membership>();
             if (excludedSegments.HasValue)
             {
                 var excludedIds = excludedSegments.ToString().Split(',');

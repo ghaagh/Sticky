@@ -33,7 +33,7 @@ namespace Sticky.Application.ResponseUpdater.Services
         {
             while (true)
             {
-                Dictionary<string, List<Membership>> usersDictionary = new Dictionary<string, List<Membership>>();
+                var usersDictionary = new Dictionary<string, List<Membership>>();
                 var batchRequestId = await PrepareBatchRequestAsync();
                 if (batchRequestId.Count == 0)
                 {
@@ -42,20 +42,20 @@ namespace Sticky.Application.ResponseUpdater.Services
                 }
                 foreach (var item in batchRequestId)
                 {
-                    List<Membership> membershipList = new List<Membership>();
-                    Key matchKey = new Key("Sticky", "Activity", $"{ item }_{_setting.HostId}");
+                    var membershipList = new List<Membership>();
+                    var matchKey = new Key("Sticky", "Activity", $"{ item }_{_setting.HostId}");
                     var record = _aeroClient.Get(new Policy(), matchKey);
                     if (record != null)
                     {
 
-                        Membership segmentMembership = new Membership()
+                        var segmentMembership = new Membership()
                         {
                             HostId = _setting.HostId ?? 0,
                             SegmentId = _setting.SegmentId ?? 0
                            
                         };
                         var r = record.GetValue(_setting.StatType);
-                        List<string> productIds = new List<string>();
+                        var productIds = new List<string>();
                         if (r != null)
                         {
                             productIds = r.ToString().Split(",").Where(c => c != "").ToList();
@@ -84,7 +84,7 @@ namespace Sticky.Application.ResponseUpdater.Services
 
         private async Task<List<string>> PrepareBatchRequestAsync()
         {
-            List<string> batchRequestIds = new List<string>();
+            var batchRequestIds = new List<string>();
             while (batchRequestIds.Count <= _setting.BatchSize)
             {
                 var batchItem = await _requestRepository.GetLast(ResponseUpdaterTypeEnum.SpecialSegment, _setting.SegmentId.ToString());

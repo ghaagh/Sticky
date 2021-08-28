@@ -18,12 +18,12 @@ namespace Sticky.Application.Script.Middlewares.ExceptionHandling
             {
                 await _next(httpContext);
             }
-            catch (Exception ex)
+            catch
             {
-                HandleException(httpContext, ex);
+                HandleException(httpContext);
             }
         }
-        private static void HandleException(HttpContext context, Exception exception)
+        private static void HandleException(HttpContext context)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.OK;

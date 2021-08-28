@@ -41,7 +41,7 @@ namespace Sticky.Application.ResponseUpdater.Services
                 var productSegment = activeSegments.Where(c => c.ActivityType != ActivityTypeEnum.VisitPage && c.ActivityExtra == null).ToList();
                 var activeHostIds = productSegment.Select(c => c.HostId).Distinct();
 
-                Dictionary<long, List<MessageModel>> usersDictionary = new Dictionary<long, List<MessageModel>>();
+                var usersDictionary = new Dictionary<long, List<MessageModel>>();
                 var item = await _requestRepository.GetLast(ResponseUpdaterTypeEnum.ProductAndPage);
                 if (string.IsNullOrEmpty(item))
                 {
@@ -52,11 +52,11 @@ namespace Sticky.Application.ResponseUpdater.Services
                 if (await _responseRepositoy.ExistAsync(ResponseUpdaterTypeEnum.ProductAndPage,userId))
                     continue;
 
-                List<Membership> finalSegmentsForRedis = new List<Membership>();
-                Dictionary<long, Dictionary<string, object>> userData = new Dictionary<long, Dictionary<string, object>>();
+                var finalSegmentsForRedis = new List<Membership>();
+                var userData = new Dictionary<long, Dictionary<string, object>>();
                 foreach (var activeHost in activeHostIds)
                 {
-                    Key matchKey = new Key("Sticky", "Activity", $"{ item }_{activeHost}");
+                    var matchKey = new Key("Sticky", "Activity", $"{ item }_{activeHost}");
                     var record = _aeroClient.Get(new Policy(), matchKey);
                     if (record == null)
                         continue;
@@ -83,8 +83,8 @@ namespace Sticky.Application.ResponseUpdater.Services
                     foundSegmentDatainUserdata = userDataforhost.TryGetValue(segment.ActivityType.ToString(), out segmentData);
                     if (!foundSegmentDatainUserdata)
                         continue;
-                    List<string> productIds = new List<string>();
-                    Membership productVisitSegments = new Membership()
+                    var productIds = new List<string>();
+                    var productVisitSegments = new Membership()
                     {
                         HostId = segment.HostId,
                         SegmentId = segment.Id
@@ -132,7 +132,7 @@ namespace Sticky.Application.ResponseUpdater.Services
                     if (segmentData == null)
                         continue;
                     var segmentMembershipList = segmentData.ToString().Split(",");
-                    if (segmentMembershipList != null && segmentMembershipList.Count() == 0)
+                    if (segmentMembershipList != null && !segmentMembershipList.Any())
                         continue;
                     var productVisitSegments = new List<Membership>();
                     foreach (var item1 in segmentMembershipList)
@@ -144,7 +144,7 @@ namespace Sticky.Application.ResponseUpdater.Services
                                 SegmentId = int.Parse(item1)
                             });
                     }
-                    List<string> membership = new List<string>();
+                    var membership = new List<string>();
                     finalSegmentsForRedis.AddRange(productVisitSegments);
 
 

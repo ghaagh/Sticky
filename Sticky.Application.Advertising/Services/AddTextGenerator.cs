@@ -39,7 +39,7 @@ namespace Sticky.Application.Advertising.Services
 
             name = Clean(name);
             var templates = (await _segmentCache.GetAsync(segmentId.ToString())).Templates;
-            List<TemplateCache> acceptedTemplates = new List<TemplateCache>();
+            var acceptedTemplates = new List<TemplateCache>();
             var count = templates.Count();
             if (count == 0)
                 return (name, 0);
@@ -52,7 +52,7 @@ namespace Sticky.Application.Advertising.Services
                     acceptedTemplates.Add(item);
 
             }
-            if (acceptedTemplates.Count() == 0)
+            if (acceptedTemplates.Count == 0)
                 return (name, 0);
             var finalTemplate = acceptedTemplates.OrderBy(c => Guid.NewGuid()).FirstOrDefault();
             var finalName = finalTemplate.Template.Replace("@Name", name);

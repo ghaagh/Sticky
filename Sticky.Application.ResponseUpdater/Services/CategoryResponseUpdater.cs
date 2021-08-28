@@ -29,8 +29,8 @@ namespace Sticky.Application.ResponseUpdater.Services
         {
             while (true)
             {
-                Dictionary<long, List<MessageModel>> usersDictionary = new Dictionary<long, List<MessageModel>>();
-                List<long> userIdBatchList = new List<long>();
+                var usersDictionary = new Dictionary<long, List<MessageModel>>();
+                var userIdBatchList = new List<long>();
                 var segment = await _segmentCache.GetListAsync();
                 var categorySegment = segment.Where(c => !string.IsNullOrEmpty(c.ActivityExtra)).ToList();
                 var categories = categorySegment.Select(c => c.ActivityExtra);
@@ -70,20 +70,20 @@ namespace Sticky.Application.ResponseUpdater.Services
                     var grouped = responseList.Data.GroupBy(c => long.Parse(c.UserId));
                     foreach (var item in grouped)
                     {
-                        if (item.Count() != 0)
+                        if (item.Any())
                             usersDictionary.TryAdd(item.Key, item.ToList());
                     }
                 }
                 foreach (var item in userIdBatchList)
                 {
                     var found = false;
-                    List<MessageModel> userList = new List<MessageModel>();
+                    var userList = new List<MessageModel>();
                     found = usersDictionary.TryGetValue(item, out userList);
                     if (found)
                     {
                         var cats = userList.Select(c => c.CategoryName);
                         var segmentIds = categorySegment.Where(c => cats.Contains(c.ActivityExtra));
-                        List<Membership> finalSegmentsForRedis = new List<Membership>();
+                        var finalSegmentsForRedis = new List<Membership>();
                         if (segmentIds != null)
                         {
 
@@ -104,7 +104,7 @@ namespace Sticky.Application.ResponseUpdater.Services
 
         }
 
-        private string CreateDruidRequestBody(IEnumerable<string> categories, List<long> userBatchList)
+        private static string CreateDruidRequestBody(IEnumerable<string> categories, List<long> userBatchList)
         {
             return $"select Distinct(CategoryName),UserId from ProductActions WHERE UserId in " +
                                   $"({string.Join(',', userBatchList.Select(c => "'" + c + "'"))}) " +

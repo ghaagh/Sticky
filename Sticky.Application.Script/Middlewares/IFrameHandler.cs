@@ -36,7 +36,9 @@ namespace Sticky.Application.Script.Middlewares
         private readonly IClientUserRepository _clientUserRepository;
         private readonly IUtility _domainExtractor;
         private readonly Setting _setting;
+#pragma warning disable IDE0060 // Remove unused parameter
         public IFrameHandler(RequestDelegate next, IUtility domainExtractor, IClientUserRepository clientUserRepository, IOptions<Setting> options, ICache<HostCache> hostCache, IMultipleCache<PartnerCache> partnerCache)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             _partnerCache = partnerCache;
             _hostCache = hostCache;

@@ -21,7 +21,7 @@ namespace Sticky.Application.CacheUpdater
         private static int interval;
         private static ServiceProvider serviceProvider;
 
-        static void Main(string[] args)
+        static void Main()
         {
             MainAsync().GetAwaiter().GetResult();
         }

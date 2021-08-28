@@ -16,7 +16,9 @@ namespace Sticky.Application.CookieSyncing.Middlewares
         private readonly IMultipleCache<PartnerCache> _partnerCache;
         private readonly IClientUserRepository _clientUserRepository;
         private readonly Setting _setting;
+#pragma warning disable IDE0060 // Remove unused parameter
         public CookieSyncHandler(RequestDelegate next, ICookieSyncRepository cookieSyncRepository, IMultipleCache<PartnerCache> partnerCache, IClientUserRepository clientUserRepository, IOptions<Setting> setting)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             _partnerCache = partnerCache;
             _clientUserRepository = clientUserRepository;

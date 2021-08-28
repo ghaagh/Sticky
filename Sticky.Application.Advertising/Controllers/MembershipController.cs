@@ -8,7 +8,7 @@ namespace Sticky.Application.Advertising.Controllers
     [ApiController]
     public class MembershipController : ControllerBase
     {
-        private IMembershipFinder _membershipFinder;
+        private readonly IMembershipFinder _membershipFinder;
         public MembershipController(IMembershipFinder membershipFinder)
         {
             _membershipFinder = membershipFinder ;

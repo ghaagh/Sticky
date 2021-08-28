@@ -80,104 +80,100 @@ namespace Sticky.Application.Consumer
                 AutoOffsetReset = AutoOffsetReset.Earliest,
             };
 
-            using (var c = new ConsumerBuilder<Ignore, string>(conf).Build())
+            using var c = new ConsumerBuilder<Ignore, string>(conf).Build();
+            c.Subscribe("Sticky");
+
+            var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, e) =>
             {
-                c.Subscribe("Sticky");
-
-#pragma warning disable IDE0067 // Dispose objects before losing scope
-                CancellationTokenSource cts = new CancellationTokenSource();
-#pragma warning restore IDE0067 // Dispose objects before losing scope
-                Console.CancelKeyPress += (_, e) =>
-                {
-                    e.Cancel = true; // prevent the process from terminating.
+                e.Cancel = true; // prevent the process from terminating.
                     cts.Cancel();
-                };
+            };
 
-                try
+            try
+            {
+
+                while (true)
                 {
-
-                    while (true)
+                    try
                     {
-                        try
-                        {
-                            var cr = c.Consume(cts.Token);
-                            var pagedSegments = (await segmentCache.GetListAsync())
-                                            .Where(x => x.ActivityType == Domain.SegmentAggrigate.ActivityTypeEnum.VisitPage
-                                            && !string.IsNullOrEmpty(x.ActivityExtra)).ToList();
+                        var cr = c.Consume(cts.Token);
+                        var pagedSegments = (await segmentCache.GetListAsync())
+                                        .Where(x => x.ActivityType == Domain.SegmentAggrigate.ActivityTypeEnum.VisitPage
+                                        && !string.IsNullOrEmpty(x.ActivityExtra)).ToList();
 
-                            MessageModel data = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageModel>(cr.Value);
-                            if (data != null)
+                        MessageModel data = Newtonsoft.Json.JsonConvert.DeserializeObject<MessageModel>(cr.Message.Value);
+                        if (data != null)
+                        {
+                            var matchKey = new Key("Sticky", "Activity", $"{ data.UserId }_{data.HostId}");
+                            var record = _client.Get(new Policy(), matchKey);
+                            if (!string.IsNullOrEmpty(data.ProductId) && data.StatType != "PageView")
                             {
-                                Key matchKey = new Key("Sticky", "Activity", $"{ data.UserId }_{data.HostId}");
-                                var record = _client.Get(new Policy(), matchKey);
-                                if (!string.IsNullOrEmpty(data.ProductId) && data.StatType != "PageView")
+
+                                if (record == null)
                                 {
-
-                                    if (record == null)
-                                    {
-                                        var bin = new Bin(data.StatType, data.ProductId);
-                                        _client.Put(new WritePolicy() { }, matchKey, bin);
-                                    }
-                                    else
-                                    {
-                                        var listStr = record.GetString(data.StatType);
-                                        listStr += "," + data.ProductId;
-                                        var list = listStr.Split(",").ToList();
-                                        while (list.Count() > setting.MaxProductRecordPerUser)
-                                        {
-                                            list.RemoveAt(0);
-
-                                        }
-
-                                        var bin = new Bin(data.StatType, string.Join(",", list));
-
-                                        _client.Put(new WritePolicy(), matchKey, bin);
-
-                                    }
-                                    Console.WriteLine(data.UserId);
-
+                                    var bin = new Bin(data.StatType, data.ProductId);
+                                    _client.Put(new WritePolicy() { }, matchKey, bin);
                                 }
-                                else if (data.StatType == "PageView")
+                                else
                                 {
-
-                                    var pageSegmentIds = new List<string>();
-                                    if (record != null)
+                                    var listStr = record.GetString(data.StatType);
+                                    listStr += "," + data.ProductId;
+                                    var list = listStr.Split(",").ToList();
+                                    while (list.Count > setting.MaxProductRecordPerUser)
                                     {
-                                        var membershipString = record.GetString("PagedMemberships");
-                                        if (!string.IsNullOrEmpty(membershipString))
-                                        {
-                                            pageSegmentIds = membershipString.Split(",").ToList();
-                                        }
+                                        list.RemoveAt(0);
 
                                     }
-                                    var hostPageSegment = pagedSegments.Where(x => x.HostId.ToString() == data.HostId).ToList();
-                                    foreach (var item in hostPageSegment)
-                                    {
-                                        if (data.PageAddress != null && data.PageAddress.Contains(item.ActivityExtra) && !pageSegmentIds.Contains(item.Id.ToString()))
-                                        {
-                                            pageSegmentIds.Add(item.Id.ToString());
-                                        }
-                                    }
-                                    var bin = new Bin("PagedMemberships", string.Join(",", pageSegmentIds));
+
+                                    var bin = new Bin(data.StatType, string.Join(",", list));
+
                                     _client.Put(new WritePolicy(), matchKey, bin);
+
                                 }
+                                Console.WriteLine(data.UserId);
+
                             }
+                            else if (data.StatType == "PageView")
+                            {
 
+                                var pageSegmentIds = new List<string>();
+                                if (record != null)
+                                {
+                                    var membershipString = record.GetString("PagedMemberships");
+                                    if (!string.IsNullOrEmpty(membershipString))
+                                    {
+                                        pageSegmentIds = membershipString.Split(",").ToList();
+                                    }
 
-
-
+                                }
+                                var hostPageSegment = pagedSegments.Where(x => x.HostId.ToString() == data.HostId).ToList();
+                                foreach (var item in hostPageSegment)
+                                {
+                                    if (data.PageAddress != null && data.PageAddress.Contains(item.ActivityExtra) && !pageSegmentIds.Contains(item.Id.ToString()))
+                                    {
+                                        pageSegmentIds.Add(item.Id.ToString());
+                                    }
+                                }
+                                var bin = new Bin("PagedMemberships", string.Join(",", pageSegmentIds));
+                                _client.Put(new WritePolicy(), matchKey, bin);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            Console.Write(ex.Message);
-                        }
+
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Write(ex.Message);
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    // Ensure the consumer leaves the group cleanly and final offsets are committed.
-                    c.Close();
-                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Ensure the consumer leaves the group cleanly and final offsets are committed.
+                c.Close();
             }
         }
     }

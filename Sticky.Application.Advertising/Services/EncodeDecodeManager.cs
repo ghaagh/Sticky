@@ -6,7 +6,7 @@ namespace Sticky.Application.Advertising.Services
 {
     public  class EncodeDecodeManager:IEncodeDecodeManager
     {
-        public Random rnd = new Random(DateTime.Now.Millisecond);
+        public Random rnd = new(DateTime.Now.Millisecond);
         public string GetLetter()
         {
             string text = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -26,7 +26,7 @@ namespace Sticky.Application.Advertising.Services
                 string part1 = encodedString[0] + GetLetter();
                 string part2 = encodedString[1] + GetLetter();
                 string part3 = encodedString[2] + GetLetter();
-                result = part1 + part2 + part3 + encodedString.Substring(3);
+                result = part1 + part2 + part3 + encodedString[3..];
             }
 
             return result;

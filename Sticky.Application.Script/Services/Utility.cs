@@ -15,7 +15,7 @@ namespace Sticky.Application.Script.Services
             if (host.IndexOf(".") == host.LastIndexOf("."))
                 topDomain = host;
             else
-                topDomain = host.Substring(host.IndexOf(".") + 1);
+                topDomain = host[(host.IndexOf(".") + 1)..];
             return topDomain;
         }
     }
