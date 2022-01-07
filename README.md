@@ -23,7 +23,7 @@
   - A relational-Database that works with Entity Framework to save all host admins customizations ,segments and product templates. (MSSQL has been implemented).
   - A Cache provider ([Redis](https://redis.com/) has been Implemented)\
 ### Note!
-Sticky is a retargeting focused solution and it is not  **not** a complete advertising platform. it relies on Advertising networks and RTB (Real Time Biding  System) to work.
+Sticky is a retargeting focused solution and it is  **not** a complete advertising platform. it relies on Advertising networks and RTB (Real Time Biding  System) to work.
 
 ## Why use this?
 
